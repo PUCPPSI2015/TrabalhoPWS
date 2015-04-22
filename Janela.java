@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,7 +38,6 @@ public class Janela extends JFrame
     private Ponto p1,p2,p3;
     
     private Vector<Figura> figuras = new Vector<Figura>();
-    private Vector<Figura> lista = new Vector<Figura>();
 
     public Janela ()
     {
@@ -167,7 +165,7 @@ public class Janela extends JFrame
         btnCirculo.addActionListener (new DesenhoDeCirculo ());
         btnElipse.addActionListener (new DesenhoDeElipse ());
         btnSalvar.addActionListener (new Salvar ());
-        btnSalvar.addActionListener (new Abrir ());
+        btnAbrir.addActionListener (new Abrir ());
 
         JPanel     pnlBotoes = new JPanel();
         FlowLayout flwBotoes = new FlowLayout(); 
@@ -302,7 +300,7 @@ public class Janela extends JFrame
 		                            	else
 			                            	if (Abrir)
 			                                {
-			                            		Salvar = false;
+			                            		Abrir = false;
 			                                }
         }
         
@@ -391,21 +389,20 @@ public class Janela extends JFrame
     			file = new File(caminho+".pws");
     			try{
         			  BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
-        		      for(int i = 0; i < figuras.capacity(); i++)
+        		      for(int i = 0; i < figuras.size(); i++)
         		      {
-        		          buffer.write(figuras+" ");
-        		          buffer.newLine();
+        		          buffer.write(figuras+"\n");
         		      }
         		      
         		      buffer.close();
         	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
-        	                  "sucesso","Concluído",JOptionPane.INFORMATION_MESSAGE);
+        	                  "sucesso","Concluï¿½do",JOptionPane.INFORMATION_MESSAGE);
         		      
     			   }
     			catch(Exception err)
     			{
     				JOptionPane.showMessageDialog(null,err.getMessage(),
-    		                  "Atenção",JOptionPane.WARNING_MESSAGE);
+    		                  "Atenï¿½ï¿½o",JOptionPane.WARNING_MESSAGE);
     			}
             }
         }
@@ -414,29 +411,40 @@ public class Janela extends JFrame
     {
         public void actionPerformed (ActionEvent e)    
         {
-            Abrir = true;  
-
-            File arquivo = new File("RandVetor.txt");
-            Figura linha;
-            try 
-            {
-	            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo)));
-	            while (br.ready()) 
+            Abrir = true;
+            Figura f = null;
+            JFileChooser chooser;
+            String linha;
+    		chooser = new JFileChooser();
+    		String caminho = "";
+    		File arquivo = null;
+    		int retorno = chooser.showOpenDialog(null);
+    		if (retorno==JFileChooser.APPROVE_OPTION)
+    		      caminho = chooser.getSelectedFile().getAbsolutePath();
+    		if(!caminho.equals(""))
+    		{
+	    		arquivo = new File(caminho);
+	            try 
 	            {
-		             linha = br.readLine();
-		             lista.add(linha);  
+		            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo)));
+		            
+		            while ((linha = br.readLine()) != null) 
+		            {  
+		            	  String[] partes = linha.split("\n", figuras.size());
+		            	  f = figuras.get(Integer.parseInt(partes.toString()));
+		            }
+		            br.close(); 
+		        }
+	            catch (Exception err)
+	            {
+	            	System.out.println("Erro: " + err.getMessage());
 	            }
-	            br.close(); 
-	        }
-            catch (Exception err)
-            {
-            	System.out.println("Erro: " + err.getMessage());
-            }
-            for(int i=0; i<lista.size(); i++)
-            {
-                System.out.println(lista.get(i));
-            }
-         } 
+	            for(int i=0; i<figuras.size(); i++)
+	            {
+	            	figuras.set(i,f).torneSeVisivel(pnlDesenho.getGraphics());
+	            }
+    		}
+        }
     }
 
     private class FechamentoDeJanela extends WindowAdapter
