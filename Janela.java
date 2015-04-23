@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.swing.*;
 import javax.imageio.*;
+
 import java.util.*;
 
 public class Janela extends JFrame 
@@ -391,18 +393,19 @@ public class Janela extends JFrame
         			  BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
         		      for(int i = 0; i < figuras.size(); i++)
         		      {
-        		          buffer.write(figuras+"\n");
+        		    	  String[] stringDividida = figuras.toString().split(",");
+        		          buffer.write(stringDividida[i]+"\n");
         		      }
         		      
         		      buffer.close();
         	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
-        	                  "sucesso","Conclu�do",JOptionPane.INFORMATION_MESSAGE);
+        	                  "sucesso","Concluído",JOptionPane.INFORMATION_MESSAGE);
         		      
     			   }
     			catch(Exception err)
     			{
     				JOptionPane.showMessageDialog(null,err.getMessage(),
-    		                  "Aten��o",JOptionPane.WARNING_MESSAGE);
+    		                  "Atenção",JOptionPane.WARNING_MESSAGE);
     			}
             }
         }
@@ -412,9 +415,7 @@ public class Janela extends JFrame
         public void actionPerformed (ActionEvent e)    
         {
             Abrir = true;
-            Figura f = null;
             JFileChooser chooser;
-            String linha;
     		chooser = new JFileChooser();
     		String caminho = "";
     		File arquivo = null;
@@ -425,23 +426,49 @@ public class Janela extends JFrame
     		{
 	    		arquivo = new File(caminho);
 	            try 
-	            {
-		            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo)));
+	            {    
+		            FileInputStream stream = new FileInputStream(arquivo);
+		            InputStreamReader reader = new InputStreamReader(stream);
+		            BufferedReader br = new BufferedReader(reader);
+		            Scanner scanner = new Scanner(new FileReader(arquivo)).useDelimiter("\\n");
 		            
-		            while ((linha = br.readLine()) != null) 
-		            {  
-		            	  String[] partes = linha.split("\n", figuras.size());
-		            	  f = figuras.get(Integer.parseInt(partes.toString()));
-		            }
+		                    for  (int i=0; scanner.hasNext(); i++)
+							{
+		            		  String[] stringDividida = scanner.next().split(",");
+							  System.out.println(stringDividida[i]);
+							  if(stringDividida[i].equals("c"))
+				               {
+								   System.out.println(scanner.next());
+								   figuras.add (new Circulo (scanner.next()));
+		                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+				               }
+				               else
+				            	   if(stringDividida[i].equals("e"))
+					               {
+				            		   System.out.println(scanner.next());
+					            	   figuras.add (new Elipse (scanner.next()));
+			                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+					               }
+				            	   else
+					            	   if(stringDividida[i].equals("r"))
+						               {
+					            		   System.out.println(scanner.next());
+						            	   figuras.add (new Linha (scanner.next()));
+				                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+						               }
+					            	   else
+						            	   if(stringDividida[i].equals("p"))
+							               {
+						            		   System.out.println(scanner.next());
+							            	   figuras.add (new Ponto (scanner.next()));
+					                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+							               }
+							}
 		            br.close(); 
 		        }
 	            catch (Exception err)
 	            {
 	            	System.out.println("Erro: " + err.getMessage());
-	            }
-	            for(int i=0; i<figuras.size(); i++)
-	            {
-	            	figuras.set(i,f).torneSeVisivel(pnlDesenho.getGraphics());
 	            }
     		}
         }
