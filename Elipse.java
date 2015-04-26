@@ -103,4 +103,107 @@ public class Elipse extends Figura
                ":" +
                this.getCor().getBlue();
     }
+    
+    public int hashCode()
+    {
+    	int resultado =1;
+    	
+    	resultado = resultado*7+this.raio1;
+    	resultado = resultado*7+this.raio2;
+    	resultado = resultado*7+this.centro.getX();
+    	resultado = resultado*7+this.centro.getY();
+    	resultado = resultado*7+this.cor.getBlue();
+    	resultado = resultado*7+this.cor.getGreen();
+    	resultado = resultado*7+this.cor.getRed();
+    	
+    	return resultado;
+    }
+    
+    public boolean equals(Object obj)
+    {
+    	if(this==obj)
+    		return true;
+    	if(obj==this)
+    		return false;
+    	
+    	if(obj instanceof Elipse)
+    	{
+    		Elipse elip = (Elipse)obj;
+    		
+    		if(elip.raio1  == this.raio1  &&
+    		   elip.raio2  == this.raio2  &&
+    		   elip.centro == this.centro &&
+    		   elip.cor    == this.cor)
+    		   return true;
+    			
+    	}
+    	return false;
+    }
+    
+    public int compareTo (Elipse e)
+    {
+        if (this.centro.getX()<e.centro.getX())
+             return -7;
+
+        if (this.centro.getY()<e.centro.getY())
+            return -7;
+
+        if (this.raio1<e.raio1)
+            return -7;
+        
+        if (this.raio2<e.raio2)
+            return -7;
+        
+        if (this.cor.getRed()<e.cor.getRed())
+            return -7;
+       
+       if (this.cor.getGreen()<e.cor.getGreen())
+           return -7;
+       
+       if (this.cor.getBlue()<e.cor.getBlue())
+           return -7;
+        
+        if (this.centro.getX()>e.centro.getX())
+            return 7;
+
+        if (this.centro.getY()>e.centro.getY())
+           return 7;
+        
+        if (this.raio1>e.raio1)
+            return 7;
+        
+        if (this.raio2>e.raio2)
+            return 7;
+
+        if (this.cor.getRed()>e.cor.getRed())
+             return 7;
+        
+        if (this.cor.getGreen()>e.cor.getGreen())
+            return 7;
+        
+        if (this.cor.getBlue()>e.cor.getBlue())
+            return 7;
+        
+        return 0;
+    }
+    
+    public Object clone ()
+    {
+        Elipse e = null;
+
+        try
+        {
+            e = new Elipse (this.centro.getX(),this.centro.getY(),this.raio1, this.raio2,this.cor);
+        }
+        catch (Exception erro)
+        {}
+
+        return e;
+    }
+    
+    public Elipse (Elipse modelo)
+    {
+    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio1, modelo.raio2,modelo.cor);
+    }
+    
 }

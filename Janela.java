@@ -3,11 +3,9 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.swing.*;
 import javax.imageio.*;
@@ -34,16 +32,16 @@ public class Janela extends JFrame
                    statusBar2 = new JLabel ("Coordenada:");
 
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
-            esperaInicioElipse, esperaFimElipse, Salvar, Abrir;
+            esperaInicioElipse, esperaElipse, esperaFimElipse, Salvar, Abrir;
 
     private Color corAtual = Color.black;
-    private Ponto p1,p2,p3;
+    private Ponto p1,p2,p3,p4;
     
     private Vector<Figura> figuras = new Vector<Figura>();
 
     public Janela ()
     {
-        super("Editor Grï¿½fico");
+        super("Editor Gráfico");
 
         try
         {
@@ -275,35 +273,49 @@ public class Janela extends JFrame
 	                        		p3 = new Ponto (e.getX(), e.getY(), corAtual);
 	                        		
 	                        		esperaInicioElipse = false;
+	                        		esperaElipse = true;
 	                        		esperaFimElipse = true;
 	                                statusBar1.setText("Mensagem: clique o ponto final da Elipse");
 	                            }
 	                        	else
-		                        	if (esperaFimElipse)
+		                        	if (esperaElipse)
 		                            {
 		                        		
-		                        		double r1 = Math.sqrt( Math.pow( (p3.getX() - e.getX()),2 ) +
-                                                               Math.pow( (p3.getY() - e.getY()),2 ) );
-
-		                            	double r2 = r1/2;
+		                        		p4 = new Ponto (e.getX(), e.getY(), corAtual);
 		                        		
 		                            	esperaInicioElipse = false;
-		                        		esperaFimElipse = false;
+		                            	esperaElipse = false;
+		                        		esperaFimElipse = true;
 		                        		
-		                                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corAtual));
-		                                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-		                                statusBar1.setText("Mensagem:");
+		                                statusBar1.setText("Mensagem:clique o pronto da Elipse");
 		                            }
 		                        	else
-		                            	if (Salvar)
-		                                {
-		                            		Salvar = false;
-		                                }
-		                            	else
-			                            	if (Abrir)
+			                        	if (esperaFimElipse)
+			                            {
+			                        		
+			                        		double r1 = Math.sqrt( Math.pow( (p3.getX() - e.getX()),2 ) +
+	                                                               Math.pow( (p3.getY() - e.getY()),2 ) );
+
+			                            	double r2 = Math.sqrt( Math.pow( (p4.getX() - e.getX()),2 ) +
+	                                                               Math.pow( (p4.getY() - e.getY()),2 ) );
+			                        		
+			                            	esperaInicioElipse = false;
+			                        		esperaFimElipse = false;
+			                        		
+			                                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corAtual));
+			                                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+			                                statusBar1.setText("Mensagem:");
+			                            }
+			                        	else
+			                            	if (Salvar)
 			                                {
-			                            		Abrir = false;
+			                            		Salvar = false;
 			                                }
+			                            	else
+				                            	if (Abrir)
+				                                {
+				                            		Abrir = false;
+				                                }
         }
         
         public void mouseReleased (MouseEvent e)
@@ -427,40 +439,41 @@ public class Janela extends JFrame
 	    		arquivo = new File(caminho);
 	            try 
 	            {    
-		            FileInputStream stream = new FileInputStream(arquivo);
-		            InputStreamReader reader = new InputStreamReader(stream);
+		            FileReader reader = new FileReader(arquivo);
 		            BufferedReader br = new BufferedReader(reader);
-		            Scanner scanner = new Scanner(new FileReader(arquivo)).useDelimiter("\\n");
 		            
-		                    for  (int i=0; scanner.hasNext(); i++)
+		            String linha = br.readLine();
+		            StringTokenizer quebrador = new StringTokenizer(linha,":");
+		            String token = quebrador.nextToken();
+					
+		                    while  (br.ready())
 							{
-		            		  String[] stringDividida = scanner.next().split(",");
-							  System.out.println(stringDividida[i]);
-							  if(stringDividida[i].equals("c"))
+							  if(token.equals("c"))
 				               {
-								   System.out.println(scanner.next());
-								   figuras.add (new Circulo (scanner.next()));
+								   System.out.println(linha);
+								   figuras.add (new Circulo (linha));
 		                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
 				               }
+							  
 				               else
-				            	   if(stringDividida[i].equals("e"))
+				            	   if(linha.contentEquals("e"))
 					               {
-				            		   System.out.println(scanner.next());
-					            	   figuras.add (new Elipse (scanner.next()));
+				            		   System.out.println(linha);
+					            	   figuras.add (new Elipse (linha));
 			                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
 					               }
 				            	   else
-					            	   if(stringDividida[i].equals("r"))
+					            	   if(linha.contentEquals("r"))
 						               {
-					            		   System.out.println(scanner.next());
-						            	   figuras.add (new Linha (scanner.next()));
+					            		   System.out.println(linha);
+						            	   figuras.add (new Linha (linha));
 				                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
 						               }
 					            	   else
-						            	   if(stringDividida[i].equals("p"))
+						            	   if(linha.contentEquals("p"))
 							               {
-						            		   System.out.println(scanner.next());
-							            	   figuras.add (new Ponto (scanner.next()));
+						            		   System.out.println(linha);
+							            	   figuras.add (new Ponto (linha));
 					                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
 							               }
 							}

@@ -86,4 +86,102 @@ public class Linha extends Figura
                ":" +
                this.getCor().getBlue();
     }
+    
+    public int hashCode()
+    {
+    	int resultado = 1;
+    	
+    	resultado = resultado*7+this.p1.getX();
+    	resultado = resultado*7+this.p1.getY();
+    	resultado = resultado*7+this.p2.getX();
+    	resultado = resultado*7+this.p2.getY();
+    	resultado = resultado*7+this.getCor().getBlue();
+    	resultado = resultado*7+this.getCor().getRed();
+    	resultado = resultado*7+this.getCor().getGreen();
+    	
+    	return resultado;
+    }
+    
+    public boolean equals(Object obj)
+    {
+    	if(this==obj)
+    		return true;
+    	if(obj==this)
+    		return false;
+    	if(obj instanceof Linha)
+    	{
+    		Linha lin =  (Linha)obj;
+    		if(lin.p1  == this.p1 &&
+    		   lin.p2  == this.p2 &&
+    		   lin.cor == this.cor)
+    		   return true;
+    	}
+    	return false;
+    }
+    
+    public int compareTo (Linha l)
+    {
+        if (this.p1.getX()<l.p1.getX())
+             return -7;
+
+        if (this.p1.getY()<l.p1.getY())
+            return -7;
+
+        if (this.p2.getX()<l.p2.getX())
+            return -7;
+        
+        if (this.p2.getY()<l.p2.getY())
+            return -7;
+        
+        if (this.cor.getRed()<l.cor.getRed())
+            return -7;
+       
+        if (this.cor.getGreen()<l.cor.getGreen())
+           return -7;
+       
+        if (this.cor.getBlue()<l.cor.getBlue())
+           return -7;
+        
+        if (this.p1.getX()>l.p1.getX())
+            return 7;
+
+        if (this.p1.getY()>l.p1.getY())
+           return 7;
+        
+        if (this.p2.getX()>l.p2.getX())
+            return 7;
+
+        if (this.p2.getY()>l.p2.getY())
+           return 7;
+
+        if (this.cor.getRed()>l.cor.getRed())
+             return 7;
+        
+        if (this.cor.getGreen()>l.cor.getGreen())
+            return 7;
+        
+        if (this.cor.getBlue()>l.cor.getBlue())
+            return 7;
+        
+        return 0;
+    }
+    
+    public Object clone ()
+    {
+        Linha l = null;
+
+        try
+        {
+            l = new Linha (this.p1.getX(),this.p1.getY(),this.p2.getX(),this.p2.getY(),this.cor);
+        }
+        catch (Exception erro)
+        {}
+
+        return l;
+    }
+    
+    public Linha (Linha modelo)
+    {
+    	this (modelo.p1.getX(), modelo.p1.getY(), modelo.p1.getX(), modelo.p1.getY(), modelo.cor);
+    }
 }
