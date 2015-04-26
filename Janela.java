@@ -441,42 +441,39 @@ public class Janela extends JFrame
 	            {    
 		            FileReader reader = new FileReader(arquivo);
 		            BufferedReader br = new BufferedReader(reader);
-		            
-		            String linha = br.readLine();
-		            StringTokenizer quebrador = new StringTokenizer(linha,":");
-		            String token = quebrador.nextToken();
-					
-		                    while  (br.ready())
-							{
-							  if(token.equals("c"))
-				               {
-								   System.out.println(linha);
-								   figuras.add (new Circulo (linha));
-		                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-				               }
-							  
-				               else
-				            	   if(linha.contentEquals("e"))
-					               {
-				            		   System.out.println(linha);
-					            	   figuras.add (new Elipse (linha));
-			                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-					               }
-				            	   else
-					            	   if(linha.contentEquals("r"))
-						               {
-					            		   System.out.println(linha);
-						            	   figuras.add (new Linha (linha));
-				                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-						               }
-					            	   else
-						            	   if(linha.contentEquals("p"))
-							               {
-						            		   System.out.println(linha);
-							            	   figuras.add (new Ponto (linha));
-					                           figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-							               }
-							}
+		            String linha;
+					while ((linha = br.readLine()) != null) {
+						linha = linha.substring(1,  linha.length());//tira o [ ou o espaço iniciau dazlinhas
+						StringTokenizer quebrador = new StringTokenizer(linha,":");
+			            String token = quebrador.nextToken();
+			            char definidor = token.charAt(1);
+			            char ultimo = linha.charAt(linha.length()-1 );
+			            char br2 = ']';
+			            if (ultimo == br2){ //ultima linha!
+			            	linha = linha.substring(0,  linha.length()-1);
+			            }
+			            if(definidor == 'p'){
+			            	figuras.add(new Ponto (linha));
+			            	figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+			            }
+			            else
+			            	if(definidor == 'r'){
+			            		figuras.add(new Linha (linha));
+			            		figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+			            	}
+			            	else
+			            		if(definidor == 'c'){
+			            			figuras.add(new Circulo (linha));
+			            			figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+			            		}
+			            		else
+			            			if(definidor == 'e'){
+			            				figuras.add(new Elipse (linha));
+			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+			            			}
+						
+					}
+	
 		            br.close(); 
 		        }
 	            catch (Exception err)
