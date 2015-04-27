@@ -20,7 +20,8 @@ public class Janela extends JFrame
                     btnLinha   = new JButton ("Linha"),
                     btnCirculo = new JButton ("Circulo"),
                     btnElipse  = new JButton ("Elipse"),
-                    btnCores   = new JButton ("Cores"),
+                    btnCorContorno  = new JButton ("Cor de contorno"),
+                    btnCorInterior  = new JButton ("Cor de Preenchimento"),
                     btnAbrir   = new JButton ("Abrir"),
                     btnSalvar  = new JButton ("Salvar"),
                     btnApagar  = new JButton ("Apagar"),
@@ -32,9 +33,10 @@ public class Janela extends JFrame
                    statusBar2 = new JLabel ("Coordenada:");
 
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
-            esperaInicioElipse, esperaElipse, esperaFimElipse, Salvar, Abrir;
+            esperaInicioElipse, esperaElipse, esperaFimElipse, Salvar, Abrir, AbrirCorContorno, AbrirCorInterior;
 
-    private Color corAtual = Color.black;
+    private Color corContorno = Color.black;
+    private Color corInterior = new Color(0,0,0,0);
     private Ponto p1,p2,p3,p4;
     
     private Vector<Figura> figuras = new Vector<Figura>();
@@ -42,7 +44,6 @@ public class Janela extends JFrame
     public Janela ()
     {
         super("Editor Gráfico");
-
         try
         {
             Image btnPontoImg = ImageIO.read(getClass().getResource("resources/ponto.jpg"));
@@ -98,7 +99,8 @@ public class Janela extends JFrame
         try
         {
             Image btnCoresImg = ImageIO.read(getClass().getResource("resources/cores.jpg"));
-            btnCores.setIcon(new ImageIcon(btnCoresImg));
+            btnCorContorno.setIcon(new ImageIcon(btnCoresImg));
+            btnCorInterior.setIcon(new ImageIcon(btnCoresImg));
         }
         catch (IOException e)
         {
@@ -107,6 +109,7 @@ public class Janela extends JFrame
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
+        
 
         try
         {
@@ -166,6 +169,8 @@ public class Janela extends JFrame
         btnElipse.addActionListener (new DesenhoDeElipse ());
         btnSalvar.addActionListener (new Salvar ());
         btnAbrir.addActionListener (new Abrir ());
+        btnCorContorno.addActionListener (new AbrirCorContorno() );
+        btnCorInterior.addActionListener (new AbrirCorInterior() );
 
         JPanel     pnlBotoes = new JPanel();
         FlowLayout flwBotoes = new FlowLayout(); 
@@ -177,7 +182,8 @@ public class Janela extends JFrame
         pnlBotoes.add (btnLinha);
         pnlBotoes.add (btnCirculo);
         pnlBotoes.add (btnElipse);
-        pnlBotoes.add (btnCores);
+        pnlBotoes.add (btnCorContorno);
+        pnlBotoes.add (btnCorInterior);
         pnlBotoes.add (btnApagar);
         pnlBotoes.add (btnSair);
 
@@ -196,7 +202,7 @@ public class Janela extends JFrame
         
         this.addWindowListener (new FechamentoDeJanela());
 
-        this.setSize (700,500);
+        this.setSize (900,500);
         this.setVisible (true);
     }
 
@@ -224,98 +230,89 @@ public class Janela extends JFrame
         {
             if (esperaPonto)
             {
-                figuras.add (new Ponto (e.getX(), e.getY(), corAtual));
+                figuras.add (new Ponto (e.getX(), e.getY(), corContorno));
                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
                 esperaPonto = false;
             }
-            else
-                if (esperaInicioReta)
-                {
-                    p1 = new Ponto (e.getX(), e.getY(), corAtual);
-                    esperaInicioReta = false;
-                    esperaFimReta = true;
-                    statusBar1.setText("Mensagem: clique o ponto final da reta");    
-                 }
-                 else
-                    if (esperaFimReta)
-                    {
-                        esperaInicioReta = false;
-                        esperaFimReta = false;
-                        figuras.add (new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corAtual));
-                        figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-                        statusBar1.setText("Mensagem:");    
-                    }
-                    else
-                    	if (esperaInicioCirculo)
-                        {
-                    		p2 = new Ponto (e.getX(), e.getY(), corAtual);
-                    		esperaInicioCirculo = false;
-                    		esperaFimCirculo = true;
-                            statusBar1.setText("Mensagem: clique o ponto final do Circulo");
-                        }
-                    	else
-                        	if (esperaFimCirculo)
-                            {
-                        		
-                        		double r = Math.sqrt( Math.pow( (p2.getX() - e.getX()),2 ) +
-                                                      Math.pow( (p2.getY() - e.getY()),2 ) );
-                        		
-                        		esperaInicioCirculo = false;
-                        		esperaFimCirculo = false;
-                                figuras.add (new Circulo (p2.getX(), e.getY(), (int)r, corAtual));
-                                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-                                statusBar1.setText("Mensagem:");
-                            }
-	                    	else
-	                        	if (esperaInicioElipse)
-	                            {
-	                        		
-	                        		p3 = new Ponto (e.getX(), e.getY(), corAtual);
-	                        		
-	                        		esperaInicioElipse = false;
-	                        		esperaElipse = true;
-	                        		esperaFimElipse = true;
-	                                statusBar1.setText("Mensagem: clique o ponto final da Elipse");
-	                            }
-	                        	else
-		                        	if (esperaElipse)
-		                            {
-		                        		
-		                        		p4 = new Ponto (e.getX(), e.getY(), corAtual);
-		                        		
-		                            	esperaInicioElipse = false;
-		                            	esperaElipse = false;
-		                        		esperaFimElipse = true;
-		                        		
-		                                statusBar1.setText("Mensagem:clique o pronto da Elipse");
-		                            }
-		                        	else
-			                        	if (esperaFimElipse)
-			                            {
-			                        		
-			                        		double r1 = Math.sqrt( Math.pow( (p3.getX() - e.getX()),2 ) +
-	                                                               Math.pow( (p3.getY() - e.getY()),2 ) );
+            else if (esperaInicioReta)
+            {
+                p1 = new Ponto (e.getX(), e.getY(), corContorno);
+                esperaInicioReta = false;
+                esperaFimReta = true;
+                statusBar1.setText("Mensagem: clique o ponto final da reta");    
+             }
+             else if (esperaFimReta)
+            {
+                esperaInicioReta = false;
+                esperaFimReta = false;
+                figuras.add (new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem:");    
+            }
+            else if (esperaInicioCirculo)
+            {
+        		p2 = new Ponto (e.getX(), e.getY(), corContorno);
+        		esperaInicioCirculo = false;
+        		esperaFimCirculo = true;
+                statusBar1.setText("Mensagem: clique o ponto final do Circulo");
+            }
+        	else if (esperaFimCirculo)
+            {
+        		
+        		double r = Math.sqrt( Math.pow( (p2.getX() - e.getX()),2 ) +
+                                      Math.pow( (p2.getY() - e.getY()),2 ) );
+        		
+        		esperaInicioCirculo = false;
+        		esperaFimCirculo = false;
+                figuras.add (new Circulo (p2.getX(), e.getY(), (int)r, corContorno));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem:");
+            }
+        	else if (esperaInicioElipse)
+            {
+        		
+        		p3 = new Ponto (e.getX(), e.getY(), corContorno);
+        		
+        		esperaInicioElipse = false;
+        		esperaElipse = true;
+        		esperaFimElipse = true;
+                statusBar1.setText("Mensagem: clique o ponto final da Elipse");
+            }
+        	else if (esperaElipse)
+            {
+        		
+        		p4 = new Ponto (e.getX(), e.getY(), corContorno);
+        		
+            	esperaInicioElipse = false;
+            	esperaElipse = false;
+        		esperaFimElipse = true;
+        		
+                statusBar1.setText("Mensagem:clique o pronto da Elipse");
+            }
+        	else if (esperaFimElipse)
+            {
+        		
+        		double r1 = Math.sqrt( Math.pow( (p3.getX() - e.getX()),2 ) +
+                                       Math.pow( (p3.getY() - e.getY()),2 ) );
 
-			                            	double r2 = Math.sqrt( Math.pow( (p4.getX() - e.getX()),2 ) +
-	                                                               Math.pow( (p4.getY() - e.getY()),2 ) );
-			                        		
-			                            	esperaInicioElipse = false;
-			                        		esperaFimElipse = false;
-			                        		
-			                                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corAtual));
-			                                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-			                                statusBar1.setText("Mensagem:");
-			                            }
-			                        	else
-			                            	if (Salvar)
-			                                {
-			                            		Salvar = false;
-			                                }
-			                            	else
-				                            	if (Abrir)
-				                                {
-				                            		Abrir = false;
-				                                }
+            	double r2 = Math.sqrt( Math.pow( (p4.getX() - e.getX()),2 ) +
+                                       Math.pow( (p4.getY() - e.getY()),2 ) );
+        		
+            	esperaInicioElipse = false;
+        		esperaFimElipse = false;
+        		
+                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corContorno));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem:");
+            }
+        	else if (Salvar)
+	        {
+	    		Salvar = false;
+	        }
+	    	else if (Abrir)
+            {
+        		Abrir = false;
+            }
         }
         
         public void mouseReleased (MouseEvent e)
@@ -400,15 +397,25 @@ public class Janela extends JFrame
     		      caminho = chooser.getSelectedFile().getAbsolutePath();
     		if(!caminho.equals(""))
     		{
-    			file = new File(caminho+".pws");
+    			
+    			file = new File(caminho);
+    			boolean existe = file.exists();
+    			if(!existe){
+    				System.out.println("naum existe");
+    				file = new File(caminho+".pws");
+    			}
+    			else{
+    				System.out.println("existe");
+    				JOptionPane.showMessageDialog(null,"O arquivo já ecziste! Deseja substituí-lo??? (te amo :3)");
+    			}
+    			
+  			  	String[] stringDividida = figuras.toString().split(",");
     			try{
-        			  BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
+    				  BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
         		      for(int i = 0; i < figuras.size(); i++)
         		      {
-        		    	  String[] stringDividida = figuras.toString().split(",");
         		          buffer.write(stringDividida[i]+"\n");
         		      }
-        		      
         		      buffer.close();
         	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
         	                  "sucesso","ConcluÃ­do",JOptionPane.INFORMATION_MESSAGE);
@@ -424,66 +431,81 @@ public class Janela extends JFrame
     }
     private class Abrir implements ActionListener
     {
-        public void actionPerformed (ActionEvent e)    
-        {
-            Abrir = true;
-            JFileChooser chooser;
-    		chooser = new JFileChooser();
-    		String caminho = "";
-    		File arquivo = null;
-    		int retorno = chooser.showOpenDialog(null);
-    		if (retorno==JFileChooser.APPROVE_OPTION)
-    		      caminho = chooser.getSelectedFile().getAbsolutePath();
-    		if(!caminho.equals(""))
-    		{
-	    		arquivo = new File(caminho);
-	            try 
-	            {    
-		            FileReader reader = new FileReader(arquivo);
-		            BufferedReader br = new BufferedReader(reader);
-		            String linha;
-					while ((linha = br.readLine()) != null) {
-						linha = linha.substring(1,  linha.length());//tira o [ ou o espaço iniciau dazlinhas
-						StringTokenizer quebrador = new StringTokenizer(linha,":");
-			            String token = quebrador.nextToken();
-			            char definidor = token.charAt(1);
-			            char ultimo = linha.charAt(linha.length()-1 );
-			            char br2 = ']';
-			            if (ultimo == br2){ //ultima linha!
-			            	linha = linha.substring(0,  linha.length()-1);
-			            }
-			            if(definidor == 'p'){
-			            	figuras.add(new Ponto (linha));
-			            	figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-			            }
-			            else
-			            	if(definidor == 'r'){
-			            		figuras.add(new Linha (linha));
-			            		figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-			            	}
-			            	else
-			            		if(definidor == 'c'){
-			            			figuras.add(new Circulo (linha));
-			            			figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-			            		}
-			            		else
-			            			if(definidor == 'e'){
-			            				figuras.add(new Elipse (linha));
-			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-			            			}
-						
-					}
-	
-		            br.close(); 
-		        }
-	            catch (Exception err)
-	            {
-	            	System.out.println("Erro: " + err.getMessage());
-	            }
-    		}
-        }
+    	 public void actionPerformed (ActionEvent e)    
+         {
+             Abrir = true;
+             JFileChooser chooser;
+     		chooser = new JFileChooser();
+     		String caminho = "";
+     		File arquivo = null;
+     		int retorno = chooser.showOpenDialog(null);
+     		if (retorno==JFileChooser.APPROVE_OPTION)
+     		      caminho = chooser.getSelectedFile().getAbsolutePath();
+     		if(!caminho.equals(""))
+     		{
+ 	    		arquivo = new File(caminho);
+ 	            try 
+ 	            {    
+ 		            FileReader reader = new FileReader(arquivo);
+ 		            BufferedReader br = new BufferedReader(reader);
+ 		            String linha;
+ 					while ((linha = br.readLine()) != null) {
+ 						linha = linha.substring(1,  linha.length());//tira o [ ou o espaço iniciau dazlinhas
+ 						StringTokenizer quebrador = new StringTokenizer(linha,":");
+ 						String token = quebrador.nextToken();
+ 						char definidor = token.charAt(0);
+ 						char ultimo = linha.charAt(linha.length()-1 );
+ 			            char br2 = ']';
+ 			           if (ultimo == br2){ //ultima linha!
+ 			            	linha = linha.substring(0,  linha.length()-1);
+ 			            }
+ 			          if(definidor == 'p'){
+ 			            	figuras.add(new Ponto (linha));
+ 			            	figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            }
+ 			         else
+ 			            	if(definidor == 'r'){
+ 			            		figuras.add(new Linha (linha));
+ 			            		figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            	}
+ 			            	else
+ 			            		if(definidor == 'c'){
+ 			            			figuras.add(new Circulo (linha));
+ 			            			figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            		}
+ 			            		else
+ 			            			if(definidor == 'e'){
+ 			            				figuras.add(new Elipse (linha));
+ 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            			}
+ 						
+ 			         /*  */}
+ 	
+ 		            br.close(); 
+ 		        }
+ 	            catch (Exception err)
+ 	            {
+ 	            	System.out.println("Erro: " + err.getMessage());
+ 	            }
+     		}
+         }
     }
-
+    
+    private class AbrirCorContorno implements ActionListener
+    {
+    	 public void actionPerformed (ActionEvent e)   {
+    		 corContorno = JColorChooser.showDialog(null, "Escolha uma cor para contorno", corContorno);
+			  
+    	 }
+    }
+    private class AbrirCorInterior implements ActionListener
+    {
+    	 public void actionPerformed (ActionEvent e)   {
+    		 corInterior = JColorChooser.showDialog(null, "Escolha uma cor para o preenchimento", corInterior);
+			  
+    	 }
+    }
+    
     private class FechamentoDeJanela extends WindowAdapter
     {
         public void windowClosing (WindowEvent e)

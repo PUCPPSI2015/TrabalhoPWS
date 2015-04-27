@@ -46,12 +46,12 @@ public class Elipse extends Figura
         this.centro = new Ponto (x,y,cor);
         this.raio1  = r1;
         this.raio2  = r2;
-        this.cor    = cor;
+        this.corContorno    = cor;
     }
 
     public void setCentro (int x, int y)
     {
-        this.centro = new Ponto (x,y,this.getCor());
+        this.centro = new Ponto (x,y,this.getCorContorno());
     }
 
     public void setRaio1 (int r1)
@@ -81,7 +81,7 @@ public class Elipse extends Figura
 
     public void torneSeVisivel (Graphics g)
     {
-        g.setColor (this.cor);
+        g.setColor (this.corContorno);
         g.drawOval (this.centro.getX()-raio1, this.centro.getY()-raio2, 2*raio1, 2*raio2);
 			
     }
@@ -97,11 +97,11 @@ public class Elipse extends Figura
                ":" +
                this.raio2 +
                ":" +
-               this.getCor().getRed() +
+               this.getCorContorno().getRed() +
                ":" +
-               this.getCor().getGreen() +
+               this.getCorContorno().getGreen() +
                ":" +
-               this.getCor().getBlue();
+               this.getCorContorno().getBlue();
     }
     
     public int hashCode()
@@ -112,9 +112,9 @@ public class Elipse extends Figura
     	resultado = resultado*7+this.raio2;
     	resultado = resultado*7+this.centro.getX();
     	resultado = resultado*7+this.centro.getY();
-    	resultado = resultado*7+this.cor.getBlue();
-    	resultado = resultado*7+this.cor.getGreen();
-    	resultado = resultado*7+this.cor.getRed();
+    	resultado = resultado*7+this.corContorno.getBlue();
+    	resultado = resultado*7+this.corContorno.getGreen();
+    	resultado = resultado*7+this.corContorno.getRed();
     	
     	return resultado;
     }
@@ -133,7 +133,7 @@ public class Elipse extends Figura
     		if(elip.raio1  == this.raio1  &&
     		   elip.raio2  == this.raio2  &&
     		   elip.centro == this.centro &&
-    		   elip.cor    == this.cor)
+    		   elip.corContorno    == this.corContorno)
     		   return true;
     			
     	}
@@ -154,13 +154,13 @@ public class Elipse extends Figura
         if (this.raio2<e.raio2)
             return -7;
         
-        if (this.cor.getRed()<e.cor.getRed())
+        if (this.corContorno.getRed()<e.corContorno.getRed())
             return -7;
        
-       if (this.cor.getGreen()<e.cor.getGreen())
+       if (this.corContorno.getGreen()<e.corContorno.getGreen())
            return -7;
        
-       if (this.cor.getBlue()<e.cor.getBlue())
+       if (this.corContorno.getBlue()<e.corContorno.getBlue())
            return -7;
         
         if (this.centro.getX()>e.centro.getX())
@@ -175,13 +175,13 @@ public class Elipse extends Figura
         if (this.raio2>e.raio2)
             return 7;
 
-        if (this.cor.getRed()>e.cor.getRed())
+        if (this.corContorno.getRed()>e.corContorno.getRed())
              return 7;
         
-        if (this.cor.getGreen()>e.cor.getGreen())
+        if (this.corContorno.getGreen()>e.corContorno.getGreen())
             return 7;
         
-        if (this.cor.getBlue()>e.cor.getBlue())
+        if (this.corContorno.getBlue()>e.corContorno.getBlue())
             return 7;
         
         return 0;
@@ -193,7 +193,7 @@ public class Elipse extends Figura
 
         try
         {
-            e = new Elipse (this.centro.getX(),this.centro.getY(),this.raio1, this.raio2,this.cor);
+            e = new Elipse (this.centro.getX(),this.centro.getY(),this.raio1, this.raio2,this.corContorno);
         }
         catch (Exception erro)
         {}
@@ -203,7 +203,7 @@ public class Elipse extends Figura
     
     public Elipse (Elipse modelo)
     {
-    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio1, modelo.raio2,modelo.cor);
+    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio1, modelo.raio2,modelo.corContorno);
     }
     
 }

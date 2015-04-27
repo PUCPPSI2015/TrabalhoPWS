@@ -2,26 +2,26 @@ import java.awt.*;
 
 public abstract class Figura
 {
-    protected Color cor;
+    protected Color corContorno;
 	  
     protected Figura ()
     {
-        this.cor = Color.black;
+        this.corContorno = Color.black;
     }
 	  
     protected Figura (Color cor)
     {
-        this.setCor (cor);
+        this.setCorContorno (cor);
     }
 	  
-    protected void setCor (Color cor)
+    protected void setCorContorno (Color cor)
     {
-        this.cor = cor;
+        this.corContorno = cor;
     }
 	  
-    protected Color getCor()
+    protected Color getCorContorno()
     {
-  	return this.cor;
+  	return this.corContorno;
     }
 
     public abstract String toString       ();	  

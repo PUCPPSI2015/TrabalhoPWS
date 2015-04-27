@@ -39,12 +39,12 @@ public class Circulo extends Figura
 
         this.centro = new Ponto (x,y,cor);
         this.raio   = r;
-        this.cor    = cor;
+        this.corContorno    = cor;
     }
 
     public void setCentro (int x, int y)
     {
-        this.centro = new Ponto (x,y,this.getCor());
+        this.centro = new Ponto (x,y,this.getCorContorno());
     }
 
     public void setRaio (int r)
@@ -64,7 +64,7 @@ public class Circulo extends Figura
 
     public void torneSeVisivel (Graphics g)
     {
-        g.setColor (this.cor);
+        g.setColor (this.corContorno);
         g.drawOval (this.centro.getX()-raio, this.centro.getY()-raio, 2*raio, 2*raio);
 			
     }
@@ -78,11 +78,11 @@ public class Circulo extends Figura
                ":" +
                this.raio +
                ":" +
-               this.getCor().getRed() +
+               this.getCorContorno().getRed() +
                ":" +
-               this.getCor().getGreen() +
+               this.getCorContorno().getGreen() +
                ":" +
-               this.getCor().getBlue();
+               this.getCorContorno().getBlue();
     }
     
     // ****CONFERIR DAQUI PARA BAIXO****
@@ -94,9 +94,9 @@ public class Circulo extends Figura
     	resultado = resultado*7 + this.raio;
     	resultado = resultado*7 + this.centro.getX();
     	resultado = resultado*7 + this.centro.getY();
-    	resultado = resultado*7 + this.cor.getRed();
-    	resultado = resultado*7 + this.cor.getGreen();
-    	resultado = resultado*7 + this.cor.getBlue();
+    	resultado = resultado*7 + this.corContorno.getRed();
+    	resultado = resultado*7 + this.corContorno.getGreen();
+    	resultado = resultado*7 + this.corContorno.getBlue();
     	
     	return resultado;
     }
@@ -115,7 +115,7 @@ public class Circulo extends Figura
 
             if (cir.centro    == this.centro   &&
             	cir.raio == this.raio          &&
-            	cir.cor == this.cor)
+            	cir.corContorno == this.corContorno)
                 return true;
         }
         return false;
@@ -132,13 +132,13 @@ public class Circulo extends Figura
         if (this.raio<c.raio)
             return -7;
         
-        if (this.cor.getRed()<c.cor.getRed())
+        if (this.corContorno.getRed()<c.corContorno.getRed())
             return -7;
        
-       if (this.cor.getGreen()<c.cor.getGreen())
+       if (this.corContorno.getGreen()<c.corContorno.getGreen())
            return -7;
        
-       if (this.cor.getBlue()<c.cor.getBlue())
+       if (this.corContorno.getBlue()<c.corContorno.getBlue())
            return -7;
         
         if (this.centro.getX()>c.centro.getX())
@@ -150,13 +150,13 @@ public class Circulo extends Figura
         if (this.raio>c.raio)
             return 7;
 
-        if (this.cor.getRed()>c.cor.getRed())
+        if (this.corContorno.getRed()>c.corContorno.getRed())
              return 7;
         
-        if (this.cor.getGreen()>c.cor.getGreen())
+        if (this.corContorno.getGreen()>c.corContorno.getGreen())
             return 7;
         
-        if (this.cor.getBlue()>c.cor.getBlue())
+        if (this.corContorno.getBlue()>c.corContorno.getBlue())
             return 7;
         
         return 0;
@@ -168,7 +168,7 @@ public class Circulo extends Figura
 
         try
         {
-            c = new Circulo (this.centro.getX(),this.centro.getY(),this.raio,this.cor);
+            c = new Circulo (this.centro.getX(),this.centro.getY(),this.raio,this.corContorno);
         }
         catch (Exception erro)
         {}
@@ -178,7 +178,7 @@ public class Circulo extends Figura
     
     public Circulo (Circulo modelo)
     {
-    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio,modelo.cor);
+    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio,modelo.corContorno);
     }
     
 }
