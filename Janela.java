@@ -33,7 +33,7 @@ public class Janela extends JFrame
                    statusBar2 = new JLabel ("Coordenada:");
 
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
-            esperaInicioElipse, esperaElipse, esperaFimElipse, Salvar, Abrir, AbrirCorContorno, AbrirCorInterior;
+            esperaInicioElipse, esperaElipse, esperaFimElipse, Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, Sair;
 
     private Color corContorno = Color.black;
     private Color corInterior = new Color(0,0,0,0);
@@ -171,6 +171,7 @@ public class Janela extends JFrame
         btnAbrir.addActionListener (new Abrir ());
         btnCorContorno.addActionListener (new AbrirCorContorno() );
         btnCorInterior.addActionListener (new AbrirCorInterior() );
+        btnSair.addActionListener(new Sair());
 
         JPanel     pnlBotoes = new JPanel();
         FlowLayout flwBotoes = new FlowLayout(); 
@@ -202,7 +203,7 @@ public class Janela extends JFrame
         
         this.addWindowListener (new FechamentoDeJanela());
 
-        this.setSize (900,500);
+        this.setSize (1500,800);
         this.setVisible (true);
     }
 
@@ -264,7 +265,7 @@ public class Janela extends JFrame
         		
         		esperaInicioCirculo = false;
         		esperaFimCirculo = false;
-                figuras.add (new Circulo (p2.getX(), e.getY(), (int)r, corContorno));
+                figuras.add (new Circulo (p2.getX(), p2.getY(), (int)r, corContorno));
                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");
             }
@@ -312,6 +313,10 @@ public class Janela extends JFrame
 	    	else if (Abrir)
             {
         		Abrir = false;
+            }
+	    	else if (Sair)
+            {
+        		Sair = false;
             }
         }
         
@@ -381,6 +386,16 @@ public class Janela extends JFrame
             esperaFimElipse    = false;
             statusBar1.setText("Mensagem: clique o local da Elipse desejado");
         }
+    }
+    
+    private class Sair implements ActionListener
+    {
+    	public void actionPerformed (ActionEvent e)
+    	{
+    		Sair = false;
+    		System.exit(0);
+    		
+    	}
     }
     
     private class Salvar implements ActionListener

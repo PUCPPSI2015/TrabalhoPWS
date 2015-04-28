@@ -26,4 +26,6 @@ public abstract class Figura
 
     public abstract String toString       ();	  
     public abstract void   torneSeVisivel (Graphics g);
+    
+    
 }

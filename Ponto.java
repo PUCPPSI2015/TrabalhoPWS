@@ -74,4 +74,36 @@ public class Ponto extends Figura
                ":" +
                this.getCorContorno().getBlue();
     }
+    
+    public int hashCode(){
+    	int resultado=1;
+    	resultado = resultado*7 + this.x;
+    	resultado = resultado*7 + this.y;
+    	resultado = resultado*7 + this.corContorno.getRed();
+    	resultado = resultado*7 + this.corContorno.getGreen();
+    	resultado = resultado*7 + this.corContorno.getBlue();
+    	
+    	return resultado;
+    	 	
+    	    }
+    public boolean equals(Object obj){
+    	if (this==obj){
+    		return true;
+    	}
+    	if (obj==null){
+    		return false;
+    	}
+    	if (obj instanceof Ponto){
+    		Ponto po = (Ponto)obj;
+    		
+    		if(po.x==this.x && po.y == this.y &&
+    				po.corContorno.getRed()==this.corContorno.getRed() &&
+    				po.corContorno.getBlue() == this.corContorno.getBlue() &&
+    				po.corContorno.getRed() == po.corContorno.getRed())
+    		{
+    			return true;    			
+    		}
+    	}
+    	return false;
+    }
 }
