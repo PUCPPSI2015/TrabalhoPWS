@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Ponto extends Figura
 {
-    private int x,  y;
+    protected int x,  y;
 
     public Ponto (int x, int y)
     {
@@ -17,7 +17,7 @@ public class Ponto extends Figura
     {
         super (cor);
 
-  	this.x = x;
+  	    this.x = x;
         this.y = y;
     }
 
@@ -52,13 +52,13 @@ public class Ponto extends Figura
 	  
     public int getY ()
     {
-  	return this.y;
+    	return this.y;
     }
 	  
     public void torneSeVisivel (Graphics g)
     {
-  	g.setColor (this.corContorno);
-  	g.drawLine (this.x,this.y,this.x,this.y);
+    	g.setColor (this.corContorno);
+    	g.drawLine (this.x,this.y,this.x,this.y);
     }
 
     public String toString()
@@ -75,7 +75,8 @@ public class Ponto extends Figura
                this.getCorContorno().getBlue();
     }
     
-    public int hashCode(){
+    public int hashCode()
+    {
     	int resultado=1;
     	resultado = resultado*7 + this.x;
     	resultado = resultado*7 + this.y;
@@ -85,8 +86,10 @@ public class Ponto extends Figura
     	
     	return resultado;
     	 	
-    	    }
-    public boolean equals(Object obj){
+    }
+    
+    public boolean equals(Object obj)
+    {
     	if (this==obj){
     		return true;
     	}
@@ -106,5 +109,59 @@ public class Ponto extends Figura
     		}
     	}
     	return false;
+    }
+    
+    public int compareTo (Ponto p)
+    {
+        if (this.getX()<p.getX())
+             return -7;
+
+        if (this.getY()<p.getY())
+            return -7;
+        
+        if (this.corContorno.getRed()<p.corContorno.getRed())
+            return -7;
+       
+        if (this.corContorno.getGreen()<p.corContorno.getGreen())
+           return -7;
+       
+        if (this.corContorno.getBlue()<p.corContorno.getBlue())
+           return -7;
+        
+        if (this.getX()>p.getX())
+            return 7;
+
+        if (this.getY()>p.getY())
+           return 7;
+
+        if (this.corContorno.getRed()>p.corContorno.getRed())
+             return 7;
+        
+        if (this.corContorno.getGreen()>p.corContorno.getGreen())
+            return 7;
+        
+        if (this.corContorno.getBlue()>p.corContorno.getBlue())
+            return 7;
+        
+        return 0;
+    }
+    
+    public Object clone ()
+    {
+        Ponto p = null;
+
+        try
+        {
+            p = new Ponto (this.getX(),this.getY(),this.corContorno);
+        }
+        catch (Exception erro)
+        {}
+
+        return p;
+    }
+    
+    public Ponto (Ponto modelo)
+    {
+    	this (modelo.getX(), modelo.getY(), modelo.corContorno);
     }
 }
