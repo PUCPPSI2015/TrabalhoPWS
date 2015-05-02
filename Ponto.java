@@ -96,10 +96,11 @@ public class Ponto extends Figura
     	if (obj instanceof Ponto){
     		Ponto po = (Ponto)obj;
     		
-    		if(po.x==this.x && po.y == this.y &&
-    				po.corContorno.getRed()==this.corContorno.getRed() &&
-    				po.corContorno.getBlue() == this.corContorno.getBlue() &&
-    				po.corContorno.getRed() == po.corContorno.getRed())
+    		if(po.x                     == this.x                     && 
+    		   po.y                     == this.y                     &&
+    		   po.corContorno.getRed()  == this.corContorno.getRed()  &&
+    		   po.corContorno.getBlue() == this.corContorno.getBlue() &&
+    		   po.corContorno.getRed()  == this.corContorno.getRed())
     		{
     			return true;    			
     		}
