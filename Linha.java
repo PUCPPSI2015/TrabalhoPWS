@@ -13,12 +13,12 @@ public class Linha extends Figura
         this.p2 = new Ponto (x2,y2);
     }
 	
-    public Linha (int x1, int y1, int x2, int y2, Color cor)
+    public Linha (int x1, int y1, int x2, int y2, Color cor, Color corI)
     {
-        super(cor);
+        super(cor,corI);
 
-        this.p1 = new Ponto (x1,y1,cor);
-        this.p2 = new Ponto (x2,y2,cor);
+        this.p1 = new Ponto (x1,y1,cor,corI);
+        this.p2 = new Ponto (x2,y2,cor,corI);
     }
 
     public Linha (String s)
@@ -36,20 +36,23 @@ public class Linha extends Figura
         Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                                Integer.parseInt(quebrador.nextToken()),  // G
                                Integer.parseInt(quebrador.nextToken())); // B
+        Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
+                				Integer.parseInt(quebrador.nextToken()),  // G
+                				Integer.parseInt(quebrador.nextToken())); // B
 
-        this.p1  = new Ponto (x1,y1,cor);
-        this.p2  = new Ponto (x2,y2,cor);
+        this.p1  = new Ponto (x1,y1,cor,corI);
+        this.p2  = new Ponto (x2,y2,cor,corI);
         this.corContorno = cor;
     }
 
     public void setP1 (int x, int y)
     {
-        this.p1 = new Ponto (x,y,this.getCorContorno());
+        this.p1 = new Ponto (x,y,this.getCorContorno(),this.corInterior);
     }
 
     public void setP2 (int x, int y)
     {
-        this.p2 = new Ponto (x,y,this.getCorContorno());
+        this.p2 = new Ponto (x,y,this.getCorContorno(),this.corInterior);
     }
 
     public Ponto getP1 ()
@@ -62,7 +65,7 @@ public class Linha extends Figura
         return this.p2;
     }
 
-    public void torneSeVisivel (Graphics g)
+    public void torneSeVisivel (Graphics g, Graphics l)
     {
         g.setColor(this.corContorno);
         g.drawLine(this.p1.getX(), this.p1.getY(),   // ponto inicial
@@ -84,7 +87,13 @@ public class Linha extends Figura
                ":" +
                this.getCorContorno().getGreen() +
                ":" +
-               this.getCorContorno().getBlue();
+               this.getCorContorno().getBlue() +
+               ":" +
+               this.getCorInterior().getRed() +
+               ":" +
+               this.getCorInterior().getGreen() +
+               ":" +
+               this.getCorInterior().getBlue();
     }
     
     public int hashCode()
@@ -172,7 +181,7 @@ public class Linha extends Figura
 
         try
         {
-            l = new Linha (this.p1.getX(),this.p1.getY(),this.p2.getX(),this.p2.getY(),this.corContorno);
+            l = new Linha (this.p1.getX(),this.p1.getY(),this.p2.getX(),this.p2.getY(),this.corContorno,this.corInterior);
         }
         catch (Exception erro)
         {}
@@ -182,6 +191,6 @@ public class Linha extends Figura
     
     public Linha (Linha modelo)
     {
-    	this (modelo.p1.getX(), modelo.p1.getY(), modelo.p1.getX(), modelo.p1.getY(), modelo.corContorno);
+    	this (modelo.p1.getX(), modelo.p1.getY(), modelo.p1.getX(), modelo.p1.getY(), modelo.corContorno, modelo.corInterior);
     }
 }

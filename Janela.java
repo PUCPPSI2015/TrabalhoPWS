@@ -221,23 +221,23 @@ public class Janela extends JFrame
             this.addMouseMotionListener (this);
         }
 
-        public void paint (Graphics g)
+        public void paint (Graphics g, Graphics l)
         {
             for (int i=0 ; i<figuras.size(); i++)
-                figuras.get(i).torneSeVisivel(g);
+                figuras.get(i).torneSeVisivel(g,l);
         }
         
         public void mousePressed (MouseEvent e)
         {
             if (esperaPonto)
             {
-                figuras.add (new Ponto (e.getX(), e.getY(), corContorno));
-                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                figuras.add (new Ponto (e.getX(), e.getY(), corContorno, corInterior));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                 esperaPonto = false;
             }
             else if (esperaInicioReta)
             {
-                p1 = new Ponto (e.getX(), e.getY(), corContorno);
+                p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
                 esperaInicioReta = false;
                 esperaFimReta = true;
                 statusBar1.setText("Mensagem: clique o ponto final da reta");    
@@ -246,13 +246,13 @@ public class Janela extends JFrame
             {
                 esperaInicioReta = false;
                 esperaFimReta = false;
-                figuras.add (new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno));
-                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                figuras.add (new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");    
             }
             else if (esperaInicioCirculo)
             {
-        		p2 = new Ponto (e.getX(), e.getY(), corContorno);
+        		p2 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
         		esperaInicioCirculo = false;
         		esperaFimCirculo = true;
                 statusBar1.setText("Mensagem: clique o ponto final do Circulo");
@@ -265,14 +265,14 @@ public class Janela extends JFrame
         		
         		esperaInicioCirculo = false;
         		esperaFimCirculo = false;
-                figuras.add (new Circulo (p2.getX(), p2.getY(), (int)r, corContorno));
-                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                figuras.add (new Circulo (p2.getX(), p2.getY(), (int)r, corContorno, corInterior));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");
             }
         	else if (esperaInicioElipse)
             {
         		
-        		p3 = new Ponto (e.getX(), e.getY(), corContorno);
+        		p3 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
         		
         		esperaInicioElipse = false;
         		esperaElipse = true;
@@ -282,7 +282,7 @@ public class Janela extends JFrame
         	else if (esperaElipse)
             {
         		
-        		p4 = new Ponto (e.getX(), e.getY(), corContorno);
+        		p4 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
         		
             	esperaInicioElipse = false;
             	esperaElipse = false;
@@ -302,8 +302,8 @@ public class Janela extends JFrame
             	esperaInicioElipse = false;
         		esperaFimElipse = false;
         		
-                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corContorno));
-                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corContorno,corInterior));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");
             }
         	else if (Salvar)
@@ -476,22 +476,22 @@ public class Janela extends JFrame
  			            }
  			          if(definidor == 'p'){
  			            	figuras.add(new Ponto (linha));
- 			            	figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            	figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  			            }
  			         else
  			            	if(definidor == 'r'){
  			            		figuras.add(new Linha (linha));
- 			            		figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            		figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  			            	}
  			            	else
  			            		if(definidor == 'c'){
  			            			figuras.add(new Circulo (linha));
- 			            			figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            			figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  			            		}
  			            		else
  			            			if(definidor == 'e'){
  			            				figuras.add(new Elipse (linha));
- 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+ 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  			            			}
  						
  			         /*  */}

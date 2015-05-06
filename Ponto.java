@@ -13,9 +13,9 @@ public class Ponto extends Figura
         this.y = y;
     }
 	  
-    public Ponto (int x, int y, Color cor)
+    public Ponto (int x, int y, Color cor, Color corI)
     {
-        super (cor);
+        super (cor,corI);
 
   	    this.x = x;
         this.y = y;
@@ -55,7 +55,7 @@ public class Ponto extends Figura
     	return this.y;
     }
 	  
-    public void torneSeVisivel (Graphics g)
+    public void torneSeVisivel (Graphics g, Graphics l)
     {
     	g.setColor (this.corContorno);
     	g.drawLine (this.x,this.y,this.x,this.y);
@@ -72,7 +72,13 @@ public class Ponto extends Figura
                ":" +
                this.getCorContorno().getGreen() +
                ":" +
-               this.getCorContorno().getBlue();
+               this.getCorContorno().getBlue() +
+               ":" +
+               this.getCorInterior().getRed() +
+               ":" +
+               this.getCorInterior().getGreen() +
+               ":" +
+               this.getCorInterior().getBlue();
     }
     
     public int hashCode()
@@ -152,7 +158,7 @@ public class Ponto extends Figura
 
         try
         {
-            p = new Ponto (this.getX(),this.getY(),this.corContorno);
+            p = new Ponto (this.getX(),this.getY(),this.corContorno,this.corInterior);
         }
         catch (Exception erro)
         {}
@@ -162,6 +168,6 @@ public class Ponto extends Figura
     
     public Ponto (Ponto modelo)
     {
-    	this (modelo.getX(), modelo.getY(), modelo.corContorno);
+    	this (modelo.getX(), modelo.getY(), modelo.corContorno,modelo.corInterior);
     }
 }

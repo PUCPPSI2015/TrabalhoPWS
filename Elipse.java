@@ -17,9 +17,9 @@ public class Elipse extends Figura
         this.raio2  = r2;
     }
 	
-    public Elipse (int x, int y, int r1, int r2, Color cor)
+    public Elipse (int x, int y, int r1, int r2, Color cor, Color corI)
     {
-        super (cor);
+        super (cor, corI);
 
         this.centro = new Ponto (x,y);
 
@@ -42,8 +42,12 @@ public class Elipse extends Figura
         Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                                Integer.parseInt(quebrador.nextToken()),  // G
                                Integer.parseInt(quebrador.nextToken())); // B
+        
+        Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
+                Integer.parseInt(quebrador.nextToken()),  // G
+                Integer.parseInt(quebrador.nextToken())); // B
 
-        this.centro = new Ponto (x,y,cor);
+        this.centro = new Ponto (x,y,cor,corI);
         this.raio1  = r1;
         this.raio2  = r2;
         this.corContorno    = cor;
@@ -51,7 +55,7 @@ public class Elipse extends Figura
 
     public void setCentro (int x, int y)
     {
-        this.centro = new Ponto (x,y,this.getCorContorno());
+        this.centro = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
     }
 
     public void setRaio1 (int r1)
@@ -79,10 +83,12 @@ public class Elipse extends Figura
         return this.raio2;
     }
 
-    public void torneSeVisivel (Graphics g)
+    public void torneSeVisivel (Graphics g, Graphics l)
     {
         g.setColor (this.corContorno);
         g.drawOval (this.centro.getX()-raio1, this.centro.getY()-raio2, 2*raio1, 2*raio2);
+        l.setColor (this.corInterior);
+        l.fillOval (this.centro.getX()-raio1, this.centro.getY()-raio2, 2*raio1, 2*raio2);
 			
     }
 
@@ -101,7 +107,13 @@ public class Elipse extends Figura
                ":" +
                this.getCorContorno().getGreen() +
                ":" +
-               this.getCorContorno().getBlue();
+               this.getCorContorno().getBlue() +
+               ":" +
+               this.getCorInterior().getRed() +
+               ":" +
+               this.getCorInterior().getGreen() +
+               ":" +
+               this.getCorInterior().getBlue();
     }
     
     public int hashCode()
@@ -193,7 +205,7 @@ public class Elipse extends Figura
 
         try
         {
-            e = new Elipse (this.centro.getX(),this.centro.getY(),this.raio1, this.raio2,this.corContorno);
+            e = new Elipse (this.centro.getX(),this.centro.getY(),this.raio1, this.raio2,this.corContorno,this.corInterior);
         }
         catch (Exception erro)
         {}
@@ -203,7 +215,7 @@ public class Elipse extends Figura
     
     public Elipse (Elipse modelo)
     {
-    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio1, modelo.raio2,modelo.corContorno);
+    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio1, modelo.raio2,modelo.corContorno,modelo.corInterior);
     }
     
 }
