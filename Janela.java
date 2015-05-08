@@ -43,7 +43,7 @@ public class Janela extends JFrame
 
     public Janela ()
     {
-        super("Editor Gráfico");
+        super("Editor Grï¿½fico");
         try
         {
             Image btnPontoImg = ImageIO.read(getClass().getResource("resources/ponto.jpg"));
@@ -392,9 +392,18 @@ public class Janela extends JFrame
     {
     	public void actionPerformed (ActionEvent e)
     	{
-    		Sair = false;
-    		System.exit(0);
+    		Sair = true;
     		
+    		switch(JOptionPane.showConfirmDialog(null,"Deseja salvar antes de sair?, seu gatinho :3"))
+    		{  
+    			case JOptionPane.OK_OPTION:{ 
+    				Salvar=true;
+   				 	new Salvar().actionPerformed(e);
+    			}
+    			case JOptionPane.NO_OPTION:{
+    				 System.exit(0);
+    			}
+    		}	
     	}
     }
     
@@ -409,63 +418,69 @@ public class Janela extends JFrame
     		File file = null;
     		int retorno = chooser.showSaveDialog(null);
     		if (retorno==JFileChooser.APPROVE_OPTION)
-    		      caminho = chooser.getSelectedFile().getAbsolutePath();
-    		if(!caminho.equals(""))
-    		{
-    			
-    			file = new File(caminho);
-    			boolean existe = file.exists();
-    			if(!existe){
-    				System.out.println("naum existe");
-    				file = new File(caminho+".pws");
-    			}
-    			else{
-    				System.out.println("existe");
-    				JOptionPane.showMessageDialog(null,"O arquivo já ecziste! Deseja substituí-lo??? (te amo :3)");
-    			}
-    			
-  			  	String[] stringDividida = figuras.toString().split(",");
-    			try{
-    				  BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
-        		      for(int i = 0; i < figuras.size(); i++)
-        		      {
-        		          buffer.write(stringDividida[i]+"\n");
-        		      }
-        		      buffer.close();
-        	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
-        	                  "sucesso","ConcluÃ­do",JOptionPane.INFORMATION_MESSAGE);
-        		      
-    			   }
-    			catch(Exception err)
-    			{
-    				JOptionPane.showMessageDialog(null,err.getMessage(),
-    		                  "AtenÃ§Ã£o",JOptionPane.WARNING_MESSAGE);
-    			}
+    		{      caminho = chooser.getSelectedFile().getAbsolutePath();
+	    		if(!caminho.equals(""))
+	    		{
+	    			
+	    			file = new File(caminho);
+	    			boolean existe = file.exists();
+	    			if(!existe){
+	    				file = new File(caminho+".pws");
+	    			}
+	    			else{
+	    				JOptionPane.showMessageDialog(null,"O arquivo jï¿½ ecziste! Deseja substituï¿½-lo??? (te amo :3)");
+	    			}
+	    			
+	  			  	String[] stringDividida = figuras.toString().split(",");
+	    			try{
+	    				  BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
+	        		      for(int i = 0; i < figuras.size(); i++)
+	        		      {
+	        		          buffer.write(stringDividida[i]+"\n");
+	        		      }
+	        		      buffer.close();
+	        	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
+	        	                  "sucesso","ConcluÃ­do",JOptionPane.INFORMATION_MESSAGE);
+	        		      
+	    			   }
+	    			catch(Exception err)
+	    			{
+	    				JOptionPane.showMessageDialog(null,err.getMessage(),
+	    		                  "AtenÃ§Ã£o",JOptionPane.WARNING_MESSAGE);
+	    			}
+	    		}
             }
+    		else if(retorno==JFileChooser.CANCEL_OPTION)
+    		{
+    			JOptionPane.showMessageDialog(null,"O arquivo nÃ£o foi salvo! (lindo :3)");
+    		}
         }
     }
     private class Abrir implements ActionListener
     {
     	 public void actionPerformed (ActionEvent e)    
          {
-             Abrir = true;
-             JFileChooser chooser;
+            Abrir = true;
+            JFileChooser chooser;
      		chooser = new JFileChooser();
      		String caminho = "";
      		File arquivo = null;
-     		int retorno = chooser.showOpenDialog(null);
+     		int retorno = chooser.showOpenDialog(null);    
      		if (retorno==JFileChooser.APPROVE_OPTION)
      		      caminho = chooser.getSelectedFile().getAbsolutePath();
+ 
      		if(!caminho.equals(""))
      		{
  	    		arquivo = new File(caminho);
+ 	    		if (!arquivo.getAbsolutePath().endsWith(".pws"))  
+ 	     			arquivo = new File(arquivo.getAbsolutePath() + ".pws");//adicionar extensao
  	            try 
  	            {    
  		            FileReader reader = new FileReader(arquivo);
  		            BufferedReader br = new BufferedReader(reader);
  		            String linha;
  					while ((linha = br.readLine()) != null) {
- 						linha = linha.substring(1,  linha.length());//tira o [ ou o espaço iniciau dazlinhas
+ 						linha = linha.substring(1,  linha.length());//tira o [ ou o espaï¿½o iniciau dazlinhas
  						StringTokenizer quebrador = new StringTokenizer(linha,":");
  						String token = quebrador.nextToken();
  						char definidor = token.charAt(0);
@@ -509,22 +524,32 @@ public class Janela extends JFrame
     private class AbrirCorContorno implements ActionListener
     {
     	 public void actionPerformed (ActionEvent e)   {
-    		 corContorno = JColorChooser.showDialog(null, "Escolha uma cor para contorno", corContorno);
+    		 corContorno = JColorChooser.showDialog(null, "Escolha uma cor para contorno (S2 :3)", corContorno);
 			  
     	 }
     }
     private class AbrirCorInterior implements ActionListener
     {
     	 public void actionPerformed (ActionEvent e)   {
-    		 corInterior = JColorChooser.showDialog(null, "Escolha uma cor para o preenchimento", corInterior);
+    		 corInterior = JColorChooser.showDialog(null, "Escolha uma cor para o preenchimento (gatinho :3)", corInterior);
 			  
     	 }
     }
     
     private class FechamentoDeJanela extends WindowAdapter
     {
-        public void windowClosing (WindowEvent e)
+        public void windowClosing (WindowEvent e, ActionEvent s)
         {
+        	switch(JOptionPane.showConfirmDialog(null,"Deseja salvar antes de sair?, seu gatinho :3"))
+    		{  
+    			case JOptionPane.OK_OPTION:{ 
+    				Salvar=true;
+   				 	new Salvar().actionPerformed(s);;
+    			}
+    			case JOptionPane.NO_OPTION:{
+    				 System.exit(0);
+    			}
+    		}	
             System.exit(0);
         }
     }
