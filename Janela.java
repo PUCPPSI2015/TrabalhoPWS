@@ -25,7 +25,9 @@ public class Janela extends JFrame
                     btnAbrir   = new JButton ("Abrir"),
                     btnSalvar  = new JButton ("Salvar"),
                     btnApagar  = new JButton ("Apagar"),
-                    btnSair    = new JButton ("Sair");
+                    btnSair    = new JButton ("Sair"),
+					btnQuadrado = new JButton ("Quadrado"),
+					btnTriangulo = new JButton ("Triangulo");
 
     private MeuJPanel pnlDesenho = new MeuJPanel ();
     
@@ -33,7 +35,8 @@ public class Janela extends JFrame
                    statusBar2 = new JLabel ("Coordenada:");
 
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
-            esperaInicioElipse, esperaElipse, esperaFimElipse, Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, Sair;
+            esperaInicioElipse, esperaElipse, esperaFimElipse, esperaQuadrado, esperaFimQuadrado,esperaInicioTriangulo,
+            esperaTriangulo, esperaFimTriangulo, Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, Sair;
 
     private Color corContorno = Color.black;
     private Color corInterior = new Color(0,0,0,0);
@@ -43,7 +46,7 @@ public class Janela extends JFrame
 
     public Janela ()
     {
-        super("Editor Grï¿½fico");
+        super("Editor Grafico");
         try
         {
             Image btnPontoImg = ImageIO.read(getClass().getResource("resources/ponto.jpg"));
@@ -52,7 +55,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo ponto.jpg nï¿½o foi encontrado",
+                                           "Arquivo ponto.jpg não foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -162,16 +165,43 @@ public class Janela extends JFrame
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
+        try
+        {
+            Image btnQuadradoImg = ImageIO.read(getClass().getResource("resources/quadrado.jpg"));
+            btnQuadrado.setIcon(new ImageIcon(btnQuadradoImg));
+        }
+        catch (IOException e)
+        {
+            JOptionPane.showMessageDialog (null,
+                                           "Arquivo sair.jpg nï¿½o foi encontrado",
+                                           "Arquivo de imagem ausente",
+                                           JOptionPane.WARNING_MESSAGE);
+        }
+       /* try
+        {
+            Image btnTrianguloImg = ImageIO.read(getClass().getResource("resources/triangulo.jpg"));
+            btnTriangulo.setIcon(new ImageIcon(btnTrianguloImg));
+        }
+        catch (IOException e)
+        {
+            JOptionPane.showMessageDialog (null,
+                                           "Arquivo sair.jpg nï¿½o foi encontrado",
+                                           "Arquivo de imagem ausente",
+                                           JOptionPane.WARNING_MESSAGE);
+        }*/
 
         btnPonto.addActionListener (new DesenhoDePonto());
         btnLinha.addActionListener (new DesenhoDeReta ());
         btnCirculo.addActionListener (new DesenhoDeCirculo ());
         btnElipse.addActionListener (new DesenhoDeElipse ());
+        btnQuadrado.addActionListener (new AbrirQuadrado());
+        btnTriangulo.addActionListener (new AbrirTriangulo());
         btnSalvar.addActionListener (new Salvar ());
         btnAbrir.addActionListener (new Abrir ());
         btnCorContorno.addActionListener (new AbrirCorContorno() );
         btnCorInterior.addActionListener (new AbrirCorInterior() );
         btnSair.addActionListener(new Sair());
+        
 
         JPanel     pnlBotoes = new JPanel();
         FlowLayout flwBotoes = new FlowLayout(); 
@@ -183,10 +213,13 @@ public class Janela extends JFrame
         pnlBotoes.add (btnLinha);
         pnlBotoes.add (btnCirculo);
         pnlBotoes.add (btnElipse);
+        pnlBotoes.add (btnQuadrado);
+        pnlBotoes.add (btnTriangulo);
         pnlBotoes.add (btnCorContorno);
         pnlBotoes.add (btnCorInterior);
         pnlBotoes.add (btnApagar);
         pnlBotoes.add (btnSair);
+        
 
         JPanel     pnlStatus = new JPanel();
         GridLayout grdStatus = new GridLayout(1,2);
@@ -250,6 +283,7 @@ public class Janela extends JFrame
                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");    
             }
+
             else if (esperaInicioCirculo)
             {
         		p2 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
@@ -306,6 +340,47 @@ public class Janela extends JFrame
                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                 statusBar1.setText("Mensagem:");
             }
+            else if (esperaQuadrado)
+            {
+                p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
+                esperaQuadrado = false;
+                esperaFimQuadrado = true;
+                statusBar1.setText("Mensagem: clique o ponto final do Quadrado");    
+             }
+             else if (esperaFimQuadrado)
+            {
+                esperaQuadrado = false;
+                esperaFimQuadrado = false;
+                figuras.add (new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
+                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem:");    
+            }
+             else if (esperaInicioTriangulo)
+             {
+                 p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
+                 esperaInicioTriangulo = false;
+                 esperaTriangulo = true;
+                 esperaFimTriangulo = false;
+                 statusBar1.setText("Mensagem: clique o ponto final do Triangulo");    
+              }
+             else if (esperaTriangulo)
+             {
+                 p2 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
+                 esperaInicioTriangulo = false;
+                 esperaTriangulo = false;
+                 esperaFimTriangulo = true;
+                 statusBar1.setText("Mensagem: clique o ponto final do Triangulo");    
+              }
+              else if (esperaFimTriangulo)
+             {
+            	 esperaInicioTriangulo = false;
+                 esperaTriangulo = false;
+                 esperaFimTriangulo = false;
+                 figuras.add (new Triangulo(e.getX(), e.getY(), p2.getX(), p2.getY(),
+                		 					p1.getX(), p1.getY(),corContorno,corInterior));
+                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                 statusBar1.setText("Mensagem:");    
+             }
         	else if (Salvar)
 	        {
 	    		Salvar = false;
@@ -507,9 +582,19 @@ public class Janela extends JFrame
  			            			if(definidor == 'e'){
  			            				figuras.add(new Elipse (linha));
  			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
- 			            			}
+ 			            			}else
+ 	 			            			if(definidor == 'q'){
+ 	 			            				figuras.add(new Quadrado (linha));
+ 	 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+ 	 			            			}
+ 	 			            			else
+ 	 	 			            			if(definidor == 't'){
+ 	 	 			            				figuras.add(new Triangulo (linha));
+ 	 	 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+ 	 	 			            			}
+ 			          
  						
- 			         /*  */}
+ 			         }
  	
  		            br.close(); 
  		        }
@@ -535,6 +620,30 @@ public class Janela extends JFrame
 			  
     	 }
     }
+    private class AbrirQuadrado implements ActionListener
+    {
+        public void actionPerformed (ActionEvent e)    
+        {
+            esperaPonto      = false;
+            esperaQuadrado   = true;
+            esperaFimQuadrado= false;
+
+            statusBar1.setText("Mensagem: clique o ponto inicial do Quadrado");
+        }
+    }
+    private class AbrirTriangulo implements ActionListener
+    {
+        public void actionPerformed (ActionEvent e)    
+        {
+            esperaPonto           = false;
+            esperaInicioTriangulo = true;
+            esperaTriangulo       = false;
+            esperaFimTriangulo    = false;
+
+            statusBar1.setText("Mensagem: clique o ponto inicial do Triangulo");
+        }
+    	
+    }
     
     private class FechamentoDeJanela extends WindowAdapter
     {
@@ -544,3 +653,4 @@ public class Janela extends JFrame
         }
     }
 }
+

@@ -1,18 +1,29 @@
-/*import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.util.StringTokenizer;
 
-public class Triangulo extends Figura
-{
-    protected Ponto p1,p2,p3;
+
+public class Triangulo extends Figura {
 	
-    public Triangulo (int x, int y, int z)
+    protected Ponto p1, p2, p3;
+	
+    public Triangulo (int x1, int y1, int x2, int y2, int x3, int y3)
     {
-        super ();
+        super();
+
+        this.p1 = new Ponto (x1,y1);
+        this.p2 = new Ponto (x2,y2);
+        this.p3 = new Ponto (x3,y3);
     }
 	
-    public Triangulo (int x, int y, int z, Color cor, Color corI)
+    public Triangulo (int x1, int y1, int x2, int y2, int x3, int y3, Color cor, Color corI)
     {
-        super (cor, corI);
+        super(cor,corI);
+        
+        this.p1 = new Ponto (x1,y1,cor,corI);
+        this.p2 = new Ponto (x2,y2,cor,corI);
+        this.p3 = new Ponto (x3,y3,cor,corI);
     }
 
     public Triangulo (String s)
@@ -21,75 +32,88 @@ public class Triangulo extends Figura
 
         quebrador.nextToken();
 
-        int   x   = Integer.parseInt(quebrador.nextToken());
-        int   y   = Integer.parseInt(quebrador.nextToken());
+        int   x1  = Integer.parseInt(quebrador.nextToken());
+        int   y1  = Integer.parseInt(quebrador.nextToken());
 
-        int   r1  = Integer.parseInt(quebrador.nextToken());
-        int   r2  = Integer.parseInt(quebrador.nextToken());
+        int   x2  = Integer.parseInt(quebrador.nextToken());
+        int   y2  = Integer.parseInt(quebrador.nextToken());
+        
+        int   x3  = Integer.parseInt(quebrador.nextToken());
+        int   y3  = Integer.parseInt(quebrador.nextToken());
 
         Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                                Integer.parseInt(quebrador.nextToken()),  // G
                                Integer.parseInt(quebrador.nextToken())); // B
         
         Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
-                Integer.parseInt(quebrador.nextToken()),  // G
-                Integer.parseInt(quebrador.nextToken())); // B
+                				Integer.parseInt(quebrador.nextToken()),  // G
+                				Integer.parseInt(quebrador.nextToken())); // B
 
-        this.centro = new Ponto (x,y,cor,corI);
-        this.raio1  = r1;
-        this.raio2  = r2;
+        this.p1  = new Ponto (x1,y1,cor,corI);
+        this.p2  = new Ponto (x2,y2,cor,corI);
+        this.p3  = new Ponto (x3,y3,cor,corI);      
         this.corContorno    = cor;
+        this.corInterior    = corI;
+        
+        
     }
 
-    public void setCentro (int x, int y)
+    public void setP1 (int x, int y)
     {
-        this.centro = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
+        this.p1 = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
+    }
+    public void setP2 (int x, int y)
+    {
+        this.p2 = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
+    }
+    public void setP3 (int x, int y)
+    {
+        this.p3 = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
     }
 
-    public void setRaio1 (int r1)
+
+    public Ponto getP1 ()
     {
-        this.raio1 = r1;
+        return this.p1;
     }
 
-    public void setRaio2 (int r2)
+    public Ponto getP2()
     {
-        this.raio2 = r2;
+        return this.p2;
+    }
+    public Ponto getP3()
+    {
+        return this.p3;
     }
 
-    public Ponto getCentro ()
-    {
-        return this.centro;
-    }
-
-    public int getRaio1 ()
-    {
-        return this.raio1;
-    }
-
-    public int getRaio2 ()
-    {
-        return this.raio2;
-    }
 
     public void torneSeVisivel (Graphics g, Graphics l)
     {
-        g.setColor (this.corContorno);
-        g.drawOval (this.centro.getX()-raio1, this.centro.getY()-raio2, 2*raio1, 2*raio2);
-        l.setColor (this.corInterior);
-        l.fillOval (this.centro.getX()-raio1, this.centro.getY()-raio2, 2*raio1, 2*raio2);
-			
+    	l.setColor (this.corInterior);
+    	g.setColor(this.corContorno);
+        Polygon poligono = new Polygon();  
+        // Adiciona o primeiro ponto, o de cima.  
+        poligono.addPoint(this.p1.getX(),this.p2.getY());  
+        // Adiciona o segundo ponto, o do canto inferior esquerdo  
+        poligono.addPoint(this.p2.getX(),this.p2.getY());  
+        // Adiciona o segundo ponto, o do canto inferior direito          
+        poligono.addPoint(this.p3.getX(),this.p3.getY());  
+        // Desenha o triângulo  
+        g.drawPolygon(poligono);  
+        l.fillPolygon(poligono);
+    	
     }
 
     public String toString()
     {
-        return "e:" +
-               this.centro.getX() +
+        return "r:" +
+               this.p1.getX() +
                ":" +
-               this.centro.getY() +
+               this.p1.getY() +
                ":" +
-               this.raio1 +
+               this.p2.getX() +
                ":" +
-               this.raio2 +
+               this.p2.getY() +
                ":" +
                this.getCorContorno().getRed() +
                ":" +
@@ -106,15 +130,15 @@ public class Triangulo extends Figura
     
     public int hashCode()
     {
-    	int resultado =1;
+    	int resultado = 1;
     	
-    	resultado = resultado*7+this.raio1;
-    	resultado = resultado*7+this.raio2;
-    	resultado = resultado*7+this.centro.getX();
-    	resultado = resultado*7+this.centro.getY();
-    	resultado = resultado*7+this.corContorno.getBlue();
-    	resultado = resultado*7+this.corContorno.getGreen();
-    	resultado = resultado*7+this.corContorno.getRed();
+    	resultado = resultado*7+this.p1.getX();
+    	resultado = resultado*7+this.p1.getY();
+    	resultado = resultado*7+this.p2.getX();
+    	resultado = resultado*7+this.p2.getY();
+    	resultado = resultado*7+this.getCorContorno().getBlue();
+    	resultado = resultado*7+this.getCorContorno().getRed();
+    	resultado = resultado*7+this.getCorContorno().getGreen();
     	
     	return resultado;
     }
@@ -125,85 +149,82 @@ public class Triangulo extends Figura
     		return true;
     	if(obj==this)
     		return false;
-    	
-    	if(obj instanceof Elipse)
+    	if(obj instanceof Linha)
     	{
-    		Elipse elip = (Elipse)obj;
-    		
-    		if(elip.raio1  == this.raio1  &&
-    		   elip.raio2  == this.raio2  &&
-    		   elip.centro == this.centro &&
-    		   elip.corContorno    == this.corContorno)
+    		Linha lin =  (Linha)obj;
+    		if(lin.p1  == this.p1 				   &&
+    		   lin.p2  == this.p2 				   &&
+    		   lin.corContorno == this.corContorno &&
+    		   lin.corInterior == this.corInterior)
     		   return true;
-    			
     	}
     	return false;
     }
     
-    public int compareTo (Elipse e)
+    public int compareTo (Linha l)
     {
-        if (this.centro.getX()<e.centro.getX())
-             return -7;
-
-        if (this.centro.getY()<e.centro.getY())
+        if (this.p1.getX()<l.p1.getX())
             return -7;
 
-        if (this.raio1<e.raio1)
+        if (this.p1.getY()<l.p1.getY())
+            return -7;
+
+        if (this.p2.getX()<l.p2.getX())
             return -7;
         
-        if (this.raio2<e.raio2)
+        if (this.p2.getY()<l.p2.getY())
             return -7;
         
-        if (this.corContorno.getRed()<e.corContorno.getRed())
+        if (this.corContorno.getRed()<l.corContorno.getRed())
             return -7;
        
-       if (this.corContorno.getGreen()<e.corContorno.getGreen())
-           return -7;
+        if (this.corContorno.getGreen()<l.corContorno.getGreen())
+            return -7;
        
-       if (this.corContorno.getBlue()<e.corContorno.getBlue())
-           return -7;
+        if (this.corContorno.getBlue()<l.corContorno.getBlue())
+            return -7;
         
-        if (this.centro.getX()>e.centro.getX())
+        if (this.corInterior.getRed()<l.corInterior.getRed())
+            return -7;
+       
+        if (this.corInterior.getGreen()<l.corInterior.getGreen())
+            return -7;
+       
+        if (this.corInterior.getBlue()<l.corInterior.getBlue())
+            return -7;
+        
+        if (this.p1.getX()>l.p1.getX())
             return 7;
 
-        if (this.centro.getY()>e.centro.getY())
-           return 7;
-        
-        if (this.raio1>e.raio1)
+        if (this.p1.getY()>l.p1.getY())
             return 7;
         
-        if (this.raio2>e.raio2)
+        if (this.p2.getX()>l.p2.getX())
             return 7;
 
-        if (this.corContorno.getRed()>e.corContorno.getRed())
-             return 7;
-        
-        if (this.corContorno.getGreen()>e.corContorno.getGreen())
+        if (this.p2.getY()>l.p2.getY())
+            return 7;
+
+        if (this.corContorno.getRed()>l.corContorno.getRed())
             return 7;
         
-        if (this.corContorno.getBlue()>e.corContorno.getBlue())
+        if (this.corContorno.getGreen()>l.corContorno.getGreen())
+            return 7;
+        
+        if (this.corContorno.getBlue()>l.corContorno.getBlue())
+            return 7;
+        
+        if (this.corInterior.getRed()<l.corInterior.getRed())
+            return 7;
+       
+        if (this.corInterior.getGreen()<l.corInterior.getGreen())
+            return 7;
+       
+        if (this.corInterior.getBlue()<l.corInterior.getBlue())
             return 7;
         
         return 0;
     }
     
-    public Object clone ()
-    {
-        Elipse e = null;
-
-        try
-        {
-            e = new Elipse (this.centro.getX(),this.centro.getY(),this.raio1, this.raio2,this.corContorno,this.corInterior);
-        }
-        catch (Exception erro)
-        {}
-
-        return e;
-    }
+}
     
-    public Elipse (Elipse modelo)
-    {
-    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio1, modelo.raio2,modelo.corContorno,modelo.corInterior);
-    }
-    
-}*/
