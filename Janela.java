@@ -647,8 +647,18 @@ public class Janela extends JFrame
     
     private class FechamentoDeJanela extends WindowAdapter
     {
-        public void windowClosing (WindowEvent e)
+        public void windowClosing (WindowEvent e, ActionEvent s)
         {
+        	switch(JOptionPane.showConfirmDialog(null,"Deseja salvar antes de sair?, seu gatinho :3"))
+    		{  
+    			case JOptionPane.OK_OPTION:{ 
+    				Salvar=true;
+   				 	new Salvar().actionPerformed(s);;
+    			}
+    			case JOptionPane.NO_OPTION:{
+    				 System.exit(0);
+    			}
+    		}	
             System.exit(0);
         }
     }
