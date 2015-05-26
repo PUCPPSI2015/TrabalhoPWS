@@ -106,7 +106,7 @@ public class Triangulo extends Figura {
 
     public String toString()
     {
-        return "r:" +
+        return "t:" +
                this.p1.getX() +
                ":" +
                this.p1.getY() +
@@ -114,6 +114,10 @@ public class Triangulo extends Figura {
                this.p2.getX() +
                ":" +
                this.p2.getY() +
+               ":" +
+               this.p3.getX() +
+               ":" +
+               this.p3.getY() +
                ":" +
                this.getCorContorno().getRed() +
                ":" +

@@ -3,12 +3,12 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 
-public class Quadrado extends Figura {
+public class Retangulo extends Figura {
 	
     protected Ponto p1, p2;
     protected int w, h , lado;
 	
-    public Quadrado (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+    public Retangulo (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
     {
         super();
 
@@ -16,7 +16,7 @@ public class Quadrado extends Figura {
         this.p2 = new Ponto (x2,y2);
     }
 	
-    public Quadrado (int x1, int y1, int x2, int y2, Color cor, Color corI)
+    public Retangulo (int x1, int y1, int x2, int y2, Color cor, Color corI)
     {
         super(cor,corI);
 
@@ -32,7 +32,7 @@ public class Quadrado extends Figura {
        
     }
 
-    public Quadrado (String s)
+    public Retangulo (String s)
     {
         StringTokenizer quebrador = new StringTokenizer(s,":");
 
@@ -44,7 +44,7 @@ public class Quadrado extends Figura {
         int   x2  = Integer.parseInt(quebrador.nextToken());
         int   y2  = Integer.parseInt(quebrador.nextToken());
         
-
+ 
 
         Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                                Integer.parseInt(quebrador.nextToken()),  // G
@@ -56,12 +56,6 @@ public class Quadrado extends Figura {
 
         this.p1  = new Ponto (x1,y1,cor,corI);
         this.p2  = new Ponto (x2,y2,cor,corI);
-        this.w = p1.getX() - p2.getX();
-        if(this.w < 0) this.w = -this.w;
-        this.h = p1.getY() - p2.getY();
-        if(this.h < 0) this.h = -this.h;
-        if(this.w > this.h) this.lado = this.w;
-        else this.lado = this.h;
         
     }
 
@@ -99,15 +93,15 @@ public class Quadrado extends Figura {
     {
         g.setColor(this.corContorno);
         l.setColor(this.corInterior);
-        g.drawRect(p1.getX(), p1.getY(), lado, lado);
-        l.fillRect(p1.getX(), p1.getY(), lado, lado);
+        g.drawRect( p1.getX(), p1.getY(),p2.getX()/2, p2.getY());
+        l.fillRect( p1.getX(), p1.getY(),p2.getX()/2, p2.getY());
         System.out.println(lado);
        
     }
 
     public String toString()
     {
-        return "q:" +
+        return "r:" +
                this.p1.getX() +
                ":" +
                this.p1.getY() +
@@ -115,12 +109,6 @@ public class Quadrado extends Figura {
                this.p2.getX() +
                ":" +
                this.p2.getY() +
-               ":" +
-               this.w +
-               ":" +
-               this.h +
-               ":" +
-               this.lado +
                ":" +
                this.getCorContorno().getRed() +
                ":" +
@@ -234,5 +222,3 @@ public class Quadrado extends Figura {
     }
     
 }
-    
- 
