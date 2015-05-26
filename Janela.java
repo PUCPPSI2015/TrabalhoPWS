@@ -20,8 +20,8 @@ public class Janela extends JFrame
                     btnLinha   = new JButton ("Linha"),
                     btnCirculo = new JButton ("Circulo"),
                     btnElipse  = new JButton ("Elipse"),
-                    btnCorContorno  = new JButton ("Cor de contorno"),
-                    btnCorInterior  = new JButton ("Cor de Preenchimento"),
+                    btnCorContorno  = new JButton ("Cor Contorno"),
+                    btnCorInterior  = new JButton ("Cor Interior"),
                     btnAbrir   = new JButton ("Abrir"),
                     btnSalvar  = new JButton ("Salvar"),
                     btnApagar  = new JButton ("Apagar"),
@@ -177,9 +177,9 @@ public class Janela extends JFrame
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
-       /* try
+        try
         {
-            Image btnTrianguloImg = ImageIO.read(getClass().getResource("resources/triangulo.jpg"));
+        	Image btnTrianguloImg = ImageIO.read(getClass().getResource("resources/triangulo.jpg"));
             btnTriangulo.setIcon(new ImageIcon(btnTrianguloImg));
         }
         catch (IOException e)
@@ -188,7 +188,7 @@ public class Janela extends JFrame
                                            "Arquivo sair.jpg n�o foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
-        }*/
+        }
 
         btnPonto.addActionListener (new DesenhoDePonto());
         btnLinha.addActionListener (new DesenhoDeReta ());
