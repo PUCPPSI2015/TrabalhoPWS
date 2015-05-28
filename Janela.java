@@ -617,12 +617,17 @@ public class Janela extends JFrame
  	 			            			if(definidor == 'q'){
  	 			            				figuras.add(new Quadrado (linha));
  	 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
- 	 			            			}
- 	 			            			else
- 	 	 			            			if(definidor == 't'){
- 	 	 			            				figuras.add(new Triangulo (linha));
+ 	 			            			}else
+ 	 	 			            			if(definidor == 'g'){
+ 	 	 			            				figuras.add(new Retangulo (linha));
  	 	 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
- 	 	 			            			}
+ 	 	 			            			}else
+ 	 	 	 			            			if(definidor == 't'){
+ 	 	 	 			            				figuras.add(new Triangulo (linha));
+ 	 	 	 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+ 	 	 	 			            			}
+ 			          
+ 	 			            			
  			          
  						
  			         }
