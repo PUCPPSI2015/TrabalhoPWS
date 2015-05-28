@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 public class Quadrado extends Figura {
 	
-    protected Ponto p1, p2;
+    protected Ponto p1, p2, pbase;
     protected int w, h , lado;
 	
     public Quadrado (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
@@ -23,10 +23,25 @@ public class Quadrado extends Figura {
         this.p1 = new Ponto (x1,y1,cor,corI);
         this.p2 = new Ponto (x2,y2,cor,corI);
         
+        
+        
+        if((p2.getX() < p1.getX()) && (p2.getY() < p1.getY())) //se p2 está acima e a esquerda -izi
+        	this.pbase = this.p2;
+        else if((p1.getX() < p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta abixo e a direita - izi
+        	this.pbase = this.p1;
+        else if((p1.getX() < p2.getX()) && (p1.getY() > p2.getY())) //se p2 esta acima e a direita - hardcore
+        	this.pbase = new Ponto (p1.getX(),p2.getY());
+        else if((p1.getX() > p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta acima e a direita - hardcore
+        	this.pbase = new Ponto (p2.getX(),p1.getY());
+        
         this.w = p1.getX() - p2.getX();
         if(this.w < 0) this.w = -this.w;
+        
+        
         this.h = p1.getY() - p2.getY();
         if(this.h < 0) this.h = -this.h;
+        
+        
         if(this.w > this.h) this.lado = this.w;
         else this.lado = this.h;
        
@@ -99,8 +114,8 @@ public class Quadrado extends Figura {
     {
         g.setColor(this.corContorno);
         l.setColor(this.corInterior);
-        g.drawRect(p1.getX(), p1.getY(), lado, lado);
-        l.fillRect(p1.getX(), p1.getY(), lado, lado);
+        g.drawRect(pbase.getX(), pbase.getY(), lado, lado);
+        l.fillRect(pbase.getX(), pbase.getY(), lado, lado);
         System.out.println(lado);
        
     }
