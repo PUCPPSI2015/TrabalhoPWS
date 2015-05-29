@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.imageio.*;
 
 import java.util.*;
+import java.util.Vector;
+
 
 public class Janela extends JFrame 
 {
@@ -45,6 +47,8 @@ public class Janela extends JFrame
     private Ponto p1,p2,p3,p4;
     
     private Vector<Figura> figuras = new Vector<Figura>();
+    
+    
 
     public Janela ()
     {
@@ -217,6 +221,13 @@ public class Janela extends JFrame
         btnCorInterior.addActionListener (new AbrirCorInterior() );
         btnSair.addActionListener(new Sair());
         
+        
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+            	pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+            }
+        });
+        
 
         JPanel     pnlBotoes = new JPanel();
         FlowLayout flwBotoes = new FlowLayout(); 
@@ -252,8 +263,9 @@ public class Janela extends JFrame
         
         this.addWindowListener (new FechamentoDeJanela());
 
-        this.setSize (1500,800);
+        this.setSize (1200,800);
         this.setVisible (true);
+        this.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     }
 
     private class MeuJPanel extends    JPanel 
@@ -631,7 +643,7 @@ public class Janela extends JFrame
  			          
  						
  			         }
- 	
+ 					pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  		            br.close(); 
  		        }
  	            catch (Exception err)

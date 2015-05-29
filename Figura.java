@@ -7,7 +7,7 @@ public abstract class Figura
     protected Figura ()
     {
         this.corContorno = Color.black;
-        this.corInterior = Color.blue;
+        this.corInterior = Color.black;
     }
 	  
     protected Figura (Color cor, Color corI)

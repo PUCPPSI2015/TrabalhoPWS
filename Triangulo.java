@@ -47,7 +47,8 @@ public class Triangulo extends Figura {
         
         Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 				Integer.parseInt(quebrador.nextToken()),  // G
-                				Integer.parseInt(quebrador.nextToken())); // B
+                				Integer.parseInt(quebrador.nextToken()),  // B
+                				Integer.parseInt(quebrador.nextToken())); // A
 
         this.p1  = new Ponto (x1,y1,cor,corI);
         this.p2  = new Ponto (x2,y2,cor,corI);
@@ -129,7 +130,9 @@ public class Triangulo extends Figura {
                ":" +
                this.getCorInterior().getGreen() +
                ":" +
-               this.getCorInterior().getBlue();
+               this.getCorInterior().getBlue()  +
+        	   ":" +
+        	   this.getCorInterior().getAlpha();
     }
     
     public int hashCode()

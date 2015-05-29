@@ -39,7 +39,8 @@ public class Circulo extends Figura
         
         Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 				Integer.parseInt(quebrador.nextToken()),  // G
-                				Integer.parseInt(quebrador.nextToken())); // B
+                				Integer.parseInt(quebrador.nextToken()),  // B
+                				Integer.parseInt(quebrador.nextToken())); // A
 
         this.centro = new Ponto (x,y,cor,corI);
         this.raio   = r;
@@ -95,7 +96,9 @@ public class Circulo extends Figura
                ":" +
                this.getCorInterior().getGreen() +
                ":" +
-               this.getCorInterior().getBlue();
+               this.getCorInterior().getBlue() +
+        	   ":" +
+        	   this.getCorInterior().getAlpha();
     }
     
     // ****CONFERIR DAQUI PARA BAIXO****

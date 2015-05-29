@@ -45,12 +45,14 @@ public class Elipse extends Figura
         
         Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 Integer.parseInt(quebrador.nextToken()),  // G
-                Integer.parseInt(quebrador.nextToken())); // B
+                Integer.parseInt(quebrador.nextToken()),  // B
+				Integer.parseInt(quebrador.nextToken())); // A
 
         this.centro = new Ponto (x,y,cor,corI);
         this.raio1  = r1;
         this.raio2  = r2;
         this.corContorno    = cor;
+        this.corInterior    = corI;
     }
 
     public void setCentro (int x, int y)
@@ -113,7 +115,9 @@ public class Elipse extends Figura
                ":" +
                this.getCorInterior().getGreen() +
                ":" +
-               this.getCorInterior().getBlue();
+               this.getCorInterior().getBlue() +
+        	   ":" +
+        	   this.getCorInterior().getAlpha();
     }
     
     public int hashCode()

@@ -24,6 +24,7 @@ public class Retangulo extends Figura {
         this.p2 = new Ponto (x2,y2,cor,corI);
         
         
+        
         if((p2.getX() < p1.getX()) && (p2.getY() < p1.getY())) //se p2 está acima e a esquerda -izi
         	this.pbase = this.p2;
         else if((p1.getX() < p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta abixo e a direita - izi
@@ -52,8 +53,6 @@ public class Retangulo extends Figura {
 
         int   x2  = Integer.parseInt(quebrador.nextToken());
         int   y2  = Integer.parseInt(quebrador.nextToken());
-        
- 
 
         Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                                Integer.parseInt(quebrador.nextToken()),  // G
@@ -61,10 +60,14 @@ public class Retangulo extends Figura {
         
         Color corI = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                 				Integer.parseInt(quebrador.nextToken()),  // G
-                				Integer.parseInt(quebrador.nextToken())); // B
+                				Integer.parseInt(quebrador.nextToken()),  // B
+                				Integer.parseInt(quebrador.nextToken())); // A
 
         this.p1  = new Ponto (x1,y1,cor,corI);
         this.p2  = new Ponto (x2,y2,cor,corI);
+        this.corContorno    = cor;
+        this.corInterior    = corI;
+        
         
         if((p2.getX() < p1.getX()) && (p2.getY() < p1.getY())) //se p2 está acima e a esquerda -izi
         	this.pbase = this.p2;
@@ -117,7 +120,7 @@ public class Retangulo extends Figura {
         g.setColor(this.corContorno);
         l.setColor(this.corInterior);
         g.drawRect( pbase.getX(), pbase.getY(),w,h);
-        l.fillRect( pbase.getX(), pbase.getY(),w,h);
+        l.fillRect( pbase.getX()+1, pbase.getY()+1,w-1,h-1);
         System.out.println(lado);
        
     }
@@ -143,7 +146,9 @@ public class Retangulo extends Figura {
                ":" +
                this.getCorInterior().getGreen() +
                ":" +
-               this.getCorInterior().getBlue();
+               this.getCorInterior().getBlue() +
+        	   ":" +
+        	   this.getCorInterior().getAlpha();
     }
     
     public int hashCode()
