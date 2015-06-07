@@ -30,7 +30,8 @@ public class Janela extends JFrame
                     btnSair    = new JButton ("Sair"),
 					btnQuadrado = new JButton ("Quadrado"),
 					btnTriangulo = new JButton ("Triangulo"),
-					btnRetangulo = new JButton ("Retangulo");
+					btnRetangulo = new JButton ("Retangulo"),
+					btnEscreve = new JButton ("Escreve");
 
     private MeuJPanel pnlDesenho = new MeuJPanel ();
     
@@ -40,7 +41,7 @@ public class Janela extends JFrame
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
             esperaInicioElipse, esperaElipse, esperaFimElipse, esperaQuadrado, esperaFimQuadrado,
             esperaRetangulo, esperaFimRetangulo,esperaInicioTriangulo, esperaTriangulo, esperaFimTriangulo, 
-            Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, Sair;
+            Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, esperaEscreve, Sair;
 
     private Color corContorno = Color.black;
     private Color corInterior = new Color(0,0,0,0);
@@ -220,6 +221,7 @@ public class Janela extends JFrame
         btnCorContorno.addActionListener (new AbrirCorContorno() );
         btnCorInterior.addActionListener (new AbrirCorInterior() );
         btnSair.addActionListener(new Sair());
+        btnEscreve.addActionListener(new DesenhoEscreve() );
         
         
         this.addComponentListener(new ComponentAdapter() {
@@ -245,6 +247,7 @@ public class Janela extends JFrame
         pnlBotoes.add (btnCorContorno);
         pnlBotoes.add (btnCorInterior);
         pnlBotoes.add (btnApagar);
+        pnlBotoes.add (btnEscreve);
         pnlBotoes.add (btnSair);
         
 
@@ -398,6 +401,16 @@ public class Janela extends JFrame
                  figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                  statusBar1.setText("Mensagem:");    
              }
+              else if (esperaEscreve)
+              {
+                  p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
+                  esperaEscreve = false;
+                  statusBar1.setText("Mensagem: Digite o texto que deseja escrever");
+                  figuras.add (new Escreve(e.getX(), e.getY()));
+                  figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                  statusBar1.setText("Mensagem:");    
+               }
+            
              else if (esperaInicioTriangulo)
              {
                  p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
@@ -502,6 +515,16 @@ public class Janela extends JFrame
         	esperaPonto        = false;
             esperaInicioElipse = true;
             esperaFimElipse    = false;
+            statusBar1.setText("Mensagem: clique o local da Elipse desejado");
+        }
+    }
+    
+    private class DesenhoEscreve implements ActionListener
+    {
+        public void actionPerformed (ActionEvent e)    
+        {
+        	esperaPonto        = false;
+            esperaEscreve = true;
             statusBar1.setText("Mensagem: clique o local da Elipse desejado");
         }
     }
