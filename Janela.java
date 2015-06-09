@@ -11,27 +11,39 @@ import javax.swing.*;
 import javax.imageio.*;
 
 import java.util.*;
-import java.util.Vector;
+import java.util.Timer;
 
 
 public class Janela extends JFrame 
 {
 	private static final long serialVersionUID = 1L;
-
-	private JButton btnPonto   = new JButton ("Ponto"),
-                    btnLinha   = new JButton ("Linha"),
-                    btnCirculo = new JButton ("Circulo"),
-                    btnElipse  = new JButton ("Elipse"),
-                    btnCorContorno  = new JButton ("Cor Contorno"),
-                    btnCorInterior  = new JButton ("Cor Interior"),
-                    btnAbrir   = new JButton ("Abrir"),
-                    btnSalvar  = new JButton ("Salvar"),
-                    btnApagar  = new JButton ("Apagar"),
-                    btnSair    = new JButton ("Sair"),
-					btnQuadrado = new JButton ("Quadrado"),
-					btnTriangulo = new JButton ("Triangulo"),
-					btnRetangulo = new JButton ("Retangulo"),
-					btnEscreve = new JButton ("Escreve");
+	
+	
+	
+	private JMenu mnuEArquivo   = new JMenu ("Arquivo"),
+				  mnuFiguras  = new JMenu ("Figuras"),
+				  mnuCores  = new JMenu ("Cores"),
+				  mnuTexto  = new JMenu ("Texto");
+	
+	private JMenuItem btnAbrir   = new JMenuItem ("Abrir"),
+					  btnSalvar  = new JMenuItem ("Salvar"),
+					  btnSair    = new JMenuItem ("Sair"),
+					  btnPonto   = new JMenuItem ("Ponto"),
+			          btnLinha   = new JMenuItem ("Linha"),
+			          btnCirculo = new JMenuItem ("Circulo"),
+			          btnElipse  = new JMenuItem ("Elipse"),
+			          btnQuadrado = new JMenuItem ("Quadrado"),
+			          btnTriangulo = new JMenuItem ("Triangulo"),
+			          btnRetangulo = new JMenuItem ("Retangulo"),
+			          btnCorContorno  = new JMenuItem ("Cor Contorno"),
+			          btnCorInterior  = new JMenuItem ("Cor Interior"),
+			          btnEscreve = new JMenuItem ("Escreve")
+					  ;
+	
+	private JButton btnApagar  = new JButton ("Apagar");
+                    
+					
+					
 
     private MeuJPanel pnlDesenho = new MeuJPanel ();
     
@@ -222,6 +234,8 @@ public class Janela extends JFrame
         btnCorInterior.addActionListener (new AbrirCorInterior() );
         btnSair.addActionListener(new Sair());
         btnEscreve.addActionListener(new DesenhoEscreve() );
+       
+        
         
         
         this.addComponentListener(new ComponentAdapter() {
@@ -229,26 +243,49 @@ public class Janela extends JFrame
             	pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
             }
         });
+        Timer temporizador = new Timer();
+        temporizador.scheduleAtFixedRate(new TimerTask() {
+          @Override
+          public void run() {
+        	  pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+          }
+        },0,10);
+        
         
 
         JPanel     pnlBotoes = new JPanel();
+        JMenuBar    barMenus = new JMenuBar();
         FlowLayout flwBotoes = new FlowLayout(); 
         pnlBotoes.setLayout (flwBotoes);
 
-        pnlBotoes.add (btnAbrir);
-        pnlBotoes.add (btnSalvar);
-        pnlBotoes.add (btnPonto);
-        pnlBotoes.add (btnLinha);
-        pnlBotoes.add (btnCirculo);
-        pnlBotoes.add (btnElipse);
-        pnlBotoes.add (btnQuadrado);
-        pnlBotoes.add (btnRetangulo);
-        pnlBotoes.add (btnTriangulo);
-        pnlBotoes.add (btnCorContorno);
-        pnlBotoes.add (btnCorInterior);
+        pnlBotoes.add(barMenus);
+        barMenus.add(mnuEArquivo);
+        mnuEArquivo.add(btnAbrir);
+        mnuEArquivo.add (btnSalvar);
+        mnuEArquivo.addSeparator();
+        mnuEArquivo.add (btnSair);
+        
+        barMenus.add(mnuFiguras);
+        mnuFiguras.add (btnPonto);
+        mnuFiguras.add (btnLinha);
+        mnuFiguras.add (btnCirculo);
+        mnuFiguras.add (btnElipse);
+        mnuFiguras.add (btnQuadrado);
+        mnuFiguras.add (btnRetangulo);
+        mnuFiguras.add (btnTriangulo);
+        
+        barMenus.add(mnuCores);
+        mnuCores.add (btnCorContorno);
+        mnuCores.add (btnCorInterior);
+        
+        barMenus.add(mnuTexto);
+        mnuTexto.add (btnEscreve);
+        
+        
+        
         pnlBotoes.add (btnApagar);
-        pnlBotoes.add (btnEscreve);
-        pnlBotoes.add (btnSair);
+
+
         
 
         JPanel     pnlStatus = new JPanel();
