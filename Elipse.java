@@ -120,6 +120,23 @@ public class Elipse extends Figura
         	   this.getCorInterior().getAlpha();
     }
     
+    public String toSvg()
+    {
+        return "<ellipse " +
+               "cx='" + this.centro.getX() + "' " +
+               "cy='" + this.centro.getY() + "' " +
+               "rx='" + raio1 + "' " +
+               "ry='" + raio2 + "' " +
+               "style='fill: rgb(" + this.getCorInterior().getRed() +
+               "," + this.getCorInterior().getGreen() +
+               "," + this.getCorInterior().getBlue() +
+               "); stroke: rgb(" + this.getCorContorno().getRed() +
+               "," + this.getCorContorno().getGreen() +
+               "," + this.getCorContorno().getBlue() +
+               ");'" + "/>";
+ 
+    }
+    
     public int hashCode()
     {
     	int resultado =1;

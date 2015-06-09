@@ -151,6 +151,23 @@ public class Retangulo extends Figura {
         	   this.getCorInterior().getAlpha();
     }
     
+    public String toSvg()
+    {
+        return "<rect " +
+               "x='" + pbase.getX() + "' " +
+               "y='" + pbase.getY() + "' " +
+               "width='" + w + "' " +
+               "height='" + h + "' " +
+               "style='fill: rgb(" + this.getCorInterior().getRed() +
+               "," + this.getCorInterior().getGreen() +
+               "," + this.getCorInterior().getBlue() +
+               "); stroke: rgb(" + this.getCorContorno().getRed() +
+               "," + this.getCorContorno().getGreen() +
+               "," + this.getCorContorno().getBlue() +
+               ");'" + "/>";
+ 
+    }
+    
     public int hashCode()
     {
     	int resultado = 1;

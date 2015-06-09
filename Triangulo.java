@@ -135,6 +135,25 @@ public class Triangulo extends Figura {
         	   this.getCorInterior().getAlpha();
     }
     
+    public String toSvg()
+    {
+        return "<polygon " +
+               "points='" + this.p1.getX() +
+               "," + this.p1.getY() + " " +
+               "" + this.p2.getX() +
+               "," + this.p2.getY() + " " +
+               "" + this.p3.getX() +
+               "," + this.p3.getY() + "' " +
+               "style='fill: rgb(" + this.getCorInterior().getRed() +
+               "," + this.getCorInterior().getGreen() +
+               "," + this.getCorInterior().getBlue() +
+               "); stroke: rgb(" + this.getCorContorno().getRed() +
+               "," + this.getCorContorno().getGreen() +
+               "," + this.getCorContorno().getBlue() +
+               ");'" + "/>";
+ 
+    }
+    
     public int hashCode()
     {
     	int resultado = 1;

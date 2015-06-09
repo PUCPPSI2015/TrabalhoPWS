@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.Timer;
 
 
+
 public class Janela extends JFrame 
 {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +38,9 @@ public class Janela extends JFrame
 			          btnRetangulo = new JMenuItem ("Retangulo"),
 			          btnCorContorno  = new JMenuItem ("Cor Contorno"),
 			          btnCorInterior  = new JMenuItem ("Cor Interior"),
-			          btnEscreve = new JMenuItem ("Escreve")
+			          btnEscreve = new JMenuItem ("Escreve"),
+			          btnExportar  = new JMenuItem ("Exportar "),
+					  btnFonte  = new JMenuItem ("Fontes")
 					  ;
 	
 	private JButton btnApagar  = new JButton ("Apagar");
@@ -53,7 +56,7 @@ public class Janela extends JFrame
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
             esperaInicioElipse, esperaElipse, esperaFimElipse, esperaQuadrado, esperaFimQuadrado,
             esperaRetangulo, esperaFimRetangulo,esperaInicioTriangulo, esperaTriangulo, esperaFimTriangulo, 
-            Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, esperaEscreve, Sair;
+            Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, esperaEscreve, Sair, AbrirFontes, Exportar;
 
     private Color corContorno = Color.black;
     private Color corInterior = new Color(0,0,0,0);
@@ -74,7 +77,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo ponto.jpg n�o foi encontrado",
+                                           "Arquivo ponto.jpg n„o foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -87,7 +90,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo linha.jpg n�o foi encontrado",
+                                           "Arquivo linha.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -100,7 +103,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo circulo.jpg n�o foi encontrado",
+                                           "Arquivo circulo.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -113,7 +116,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo elipse.jpg n�o foi encontrado",
+                                           "Arquivo elipse.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -127,7 +130,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo cores.jpg n�o foi encontrado",
+                                           "Arquivo cores.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -141,7 +144,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo abrir.jpg n�o foi encontrado",
+                                           "Arquivo abrir.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -154,7 +157,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo salvar.jpg n�o foi encontrado",
+                                           "Arquivo salvar.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -167,7 +170,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo apagar.jpg n�o foi encontrado",
+                                           "Arquivo apagar.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -180,7 +183,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo sair.jpg n�o foi encontrado",
+                                           "Arquivo sair.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -192,7 +195,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo sair.jpg n�o foi encontrado",
+                                           "Arquivo sair.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -204,7 +207,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo sair.jpg n�o foi encontrado",
+                                           "Arquivo sair.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -216,7 +219,7 @@ public class Janela extends JFrame
         catch (IOException e)
         {
             JOptionPane.showMessageDialog (null,
-                                           "Arquivo sair.jpg n�o foi encontrado",
+                                           "Arquivo sair.jpg nÔøΩo foi encontrado",
                                            "Arquivo de imagem ausente",
                                            JOptionPane.WARNING_MESSAGE);
         }
@@ -229,9 +232,11 @@ public class Janela extends JFrame
         btnRetangulo.addActionListener (new AbrirRetangulo());
         btnTriangulo.addActionListener (new AbrirTriangulo());
         btnSalvar.addActionListener (new Salvar ());
+        btnExportar.addActionListener (new Exportar ());
         btnAbrir.addActionListener (new Abrir ());
         btnCorContorno.addActionListener (new AbrirCorContorno() );
         btnCorInterior.addActionListener (new AbrirCorInterior() );
+        btnFonte.addActionListener (new AbrirFontes() );
         btnSair.addActionListener(new Sair());
         btnEscreve.addActionListener(new DesenhoEscreve() );
        
@@ -262,6 +267,7 @@ public class Janela extends JFrame
         barMenus.add(mnuEArquivo);
         mnuEArquivo.add(btnAbrir);
         mnuEArquivo.add (btnSalvar);
+        mnuEArquivo.add (btnExportar);
         mnuEArquivo.addSeparator();
         mnuEArquivo.add (btnSair);
         
@@ -280,6 +286,7 @@ public class Janela extends JFrame
         
         barMenus.add(mnuTexto);
         mnuTexto.add (btnEscreve);
+        mnuTexto.add (btnFonte);
         
         
         
@@ -442,8 +449,10 @@ public class Janela extends JFrame
               {
                   p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
                   esperaEscreve = false;
-                  statusBar1.setText("Mensagem: Digite o texto que deseja escrever");
-                  figuras.add (new Escreve(e.getX(), e.getY()));
+                  JFrame frame = new JFrame();
+                  String palavra = JOptionPane.showInputDialog(frame, "Digite a palavra:");
+                  String c = palavra;
+                  figuras.add (new Escreve(e.getX(), e.getY(), c));
                   figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                   statusBar1.setText("Mensagem:");    
                }
@@ -562,7 +571,7 @@ public class Janela extends JFrame
         {
         	esperaPonto        = false;
             esperaEscreve = true;
-            statusBar1.setText("Mensagem: clique o local da Elipse desejado");
+            statusBar1.setText("Mensagem: clique o local onde deseja escrever");
         }
     }
     
@@ -606,7 +615,7 @@ public class Janela extends JFrame
 	    				file = new File(caminho+".pws");
 	    			}
 	    			else{
-	    				JOptionPane.showMessageDialog(null,"O arquivo j� ecziste! Deseja substitu�-lo??? (te amo :3)");
+	    				JOptionPane.showMessageDialog(null,"O arquivo jÔøΩ ecziste! Deseja substituÔøΩ-lo??? (te amo :3)");
 	    			}
 	    			
 	  			  	String[] stringDividida = figuras.toString().split(",");
@@ -618,19 +627,19 @@ public class Janela extends JFrame
 	        		      }
 	        		      buffer.close();
 	        	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
-	        	                  "sucesso","Concluído",JOptionPane.INFORMATION_MESSAGE);
+	        	                  "sucesso","Conclu√≠do",JOptionPane.INFORMATION_MESSAGE);
 	        		      
 	    			   }
 	    			catch(Exception err)
 	    			{
 	    				JOptionPane.showMessageDialog(null,err.getMessage(),
-	    		                  "Atenção",JOptionPane.WARNING_MESSAGE);
+	    		                  "Aten√ß√£o",JOptionPane.WARNING_MESSAGE);
 	    			}
 	    		}
             }
     		else if(retorno==JFileChooser.CANCEL_OPTION)
     		{
-    			JOptionPane.showMessageDialog(null,"O arquivo não foi salvo! (lindo :3)");
+    			JOptionPane.showMessageDialog(null,"O arquivo n√£o foi salvo! (lindo :3)");
     		}
         }
     }
@@ -658,7 +667,7 @@ public class Janela extends JFrame
  		            BufferedReader br = new BufferedReader(reader);
  		            String linha;
  					while ((linha = br.readLine()) != null) {
- 						linha = linha.substring(1,  linha.length());//tira o [ ou o espa�o iniciau dazlinhas
+ 						linha = linha.substring(1,  linha.length());//tira o [ ou o espaÔøΩo iniciau dazlinhas
  						StringTokenizer quebrador = new StringTokenizer(linha,":");
  						String token = quebrador.nextToken();
  						char definidor = token.charAt(0);
@@ -697,7 +706,11 @@ public class Janela extends JFrame
  	 	 	 			            			if(definidor == 't'){
  	 	 	 			            				figuras.add(new Triangulo (linha));
  	 	 	 			            				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
- 	 	 	 			            			}
+ 	 	 	 			            			}else
+ 	 	 	 			            				if(definidor == 's'){
+ 	 	 	 			            					figuras.add(new Escreve (linha));
+ 	 	 	 			            					figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+ 	 	 	 			            				}
  			          
  	 			            			
  			          
@@ -714,11 +727,68 @@ public class Janela extends JFrame
          }
     }
     
+    
+    private class Exportar implements ActionListener{
+        public void actionPerformed (ActionEvent e)    
+        {
+            Salvar = true;  
+            JFileChooser chooser;
+               chooser = new JFileChooser();
+               String caminho = "";
+               File file = null;
+               int retorno = chooser.showSaveDialog(null);
+               if (retorno==JFileChooser.APPROVE_OPTION)
+               {      caminho = chooser.getSelectedFile().getAbsolutePath();
+                       if(!caminho.equals(""))
+                       {
+                              
+                               file = new File(caminho);
+                               boolean existe = file.exists();
+                               if(!existe){
+                                       file = new File(caminho+".html");
+                               }
+                               else{
+                                       JOptionPane.showMessageDialog(null,"O arquivo jï¿½ ecziste! Deseja substituï¿½-lo??? (te amo :3)");
+                               }
+                              
+                                       String stringFinal = "<svg version='1.1' id='editorExported' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' style='position: absolute;'width='100%' height='100%'  xml:space='preserve'>";
+                                       for(int i = 0; i < figuras.size(); i++)
+                                       {
+                                               stringFinal += figuras.get(i).toSvg();
+                                       }
+                                       stringFinal += "</svg>";
+                                      
+                               try{
+                                         BufferedWriter buffer = new BufferedWriter(new FileWriter (file));
+                                    
+                                     buffer.write(stringFinal);
+
+                                     buffer.close();
+                                 JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
+                                         "sucesso","ConcluÃ­do",JOptionPane.INFORMATION_MESSAGE);
+                                    
+                                  }
+                               catch(Exception err)
+                               {
+                                       JOptionPane.showMessageDialog(null,err.getMessage(),
+                                         "AtenÃ§Ã£o",JOptionPane.WARNING_MESSAGE);
+                               }
+                       }
+            }
+               else if(retorno==JFileChooser.CANCEL_OPTION)
+               {
+                       JOptionPane.showMessageDialog(null,"O arquivo nÃ£o foi salvo! (lindo :3)");
+               }
+        }
+
+   }
+    
+    
+    
     private class AbrirCorContorno implements ActionListener
     {
     	 public void actionPerformed (ActionEvent e)   {
     		 corContorno = JColorChooser.showDialog(null, "Escolha uma cor para contorno (S2 :3)", corContorno);
-			  
     	 }
     }
     private class AbrirCorInterior implements ActionListener
@@ -726,6 +796,18 @@ public class Janela extends JFrame
     	 public void actionPerformed (ActionEvent e)   {
     		 corInterior = JColorChooser.showDialog(null, "Escolha uma cor para o preenchimento (gatinho :3)", corInterior);
 			  
+    	 }
+    }
+    private class AbrirFontes implements ActionListener
+    {
+    	 public void actionPerformed (ActionEvent e)   {
+    		 JFontChooser fontChooser = new JFontChooser();
+    		 int result = fontChooser.showDialog(null);
+    		 if (result == JFontChooser.OK_OPTION)
+    		 {
+    		    Font font = fontChooser.getSelectedFont(); 
+    		    System.out.println("Selected Font : " + font);
+    		 }
     	 }
     }
     private class AbrirQuadrado implements ActionListener
@@ -767,17 +849,7 @@ public class Janela extends JFrame
     {
         public void windowClosing (WindowEvent e)
         {
-        	switch(JOptionPane.showConfirmDialog(null,"Deseja salvar antes de sair?, seu gatinho :3"))
-    		{  
-    			case JOptionPane.OK_OPTION:{ 
-    				Salvar=true;
-   				 	new Salvar();
-    			}
-    			case JOptionPane.NO_OPTION:{
-    				 System.exit(0);
-    			}
-    		}	
-            System.exit(0);
+    		System.exit(0);
         }
     }
 }

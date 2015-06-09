@@ -101,7 +101,21 @@ public class Circulo extends Figura
         	   this.getCorInterior().getAlpha();
     }
     
-    // ****CONFERIR DAQUI PARA BAIXO****
+    public String toSvg()
+    {
+        return "<circle " +
+               "cx='" + this.centro.getX() + "' " +
+               "cy='" + this.centro.getY() + "' " +
+               "r='" + raio + "' " +
+               "style='fill: rgb(" + this.getCorInterior().getRed() +
+               "," + this.getCorInterior().getGreen() +
+               "," + this.getCorInterior().getBlue() +
+               "); stroke: rgb(" + this.getCorContorno().getRed() +
+               "," + this.getCorContorno().getGreen() +
+               "," + this.getCorContorno().getBlue() +
+               ");'" + "/>";
+ 
+    }
     
     public int hashCode()
     {

@@ -36,7 +36,8 @@ public abstract class Figura
     	return this.corInterior;
     }
 
-    public abstract String toString       ();	  
+    public abstract String toString       ();
+    public abstract String toSvg          ();
     public abstract void   torneSeVisivel (Graphics g, Graphics l);
     
     

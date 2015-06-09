@@ -95,6 +95,22 @@ public class Linha extends Figura
                ":" +
                this.getCorInterior().getBlue();
     }
+    public String toSvg()
+    {
+        return "<line " +
+        "x1='" + this.p1.getX() + "' " +
+        "y1='" + this.p1.getY() + "' " +
+        "x2='" + this.p2.getX() + "' " +
+        "y2='" + this.p2.getY() + "' " +
+        "style='fill: rgb(" + this.getCorInterior().getRed() +
+         "," + this.getCorInterior().getGreen() +
+         "," + this.getCorInterior().getBlue() +
+         "); stroke: rgb(" + this.getCorContorno().getRed() +
+         "," + this.getCorContorno().getGreen() +
+         "," + this.getCorContorno().getBlue() +
+         ");'" + "/>";
+ 
+}
     
     public int hashCode()
     {

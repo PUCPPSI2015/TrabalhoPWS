@@ -81,6 +81,23 @@ public class Ponto extends Figura
                this.getCorInterior().getBlue();
     }
     
+    public String toSvg()
+    {
+        return "<line " +
+               "x1='" + this.x + "' " +
+               "y1='" + this.y + "' " +
+               "x2='" + this.x + "' " +
+               "y2='" + this.y + "' " +
+               "style='fill: rgb(" + this.getCorInterior().getRed() +
+               "," + this.getCorContorno().getGreen() +
+               "," + this.getCorContorno().getBlue() +
+               "); stroke: rgb(" + this.getCorContorno().getRed() +
+               "," + this.getCorContorno().getGreen() +
+               "," + this.getCorContorno().getBlue() +
+               ");'" + "/>";
+ 
+    }
+    
     public int hashCode()
     {
     	int resultado=1;
