@@ -10,6 +10,8 @@ import javax.swing.JFrame; //Possibilita a criação do Frame (em outras palavras 
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JPanel;
+import javax.swing.JButton;
 
 public class JFontChooser extends JFrame {//Temos que extender essa classe com JFrame;
 
@@ -55,9 +57,17 @@ public class JFontChooser extends JFrame {//Temos que extender essa classe com J
 
         
         list = new JList(fonts);
+        list.setSize(100,100);
         scrollPane = new JScrollPane(list);
         
-        this.add(scrollPane);
+        getContentPane().add(scrollPane);
+        
+        JPanel panel = new JPanel();
+        scrollPane.setRowHeaderView(panel);
+        
+        JButton btnAeeeeee = new JButton("Select");
+        panel.add(btnAeeeeee);
+        
 
     }
 }
