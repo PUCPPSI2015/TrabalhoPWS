@@ -802,12 +802,7 @@ public class Janela extends JFrame
     {
     	 public void actionPerformed (ActionEvent e)   {
     		 JFontChooser fontChooser = new JFontChooser();
-    		 int result = fontChooser.showDialog(null);
-    		 if (result == JFontChooser.OK_OPTION)
-    		 {
-    		    Font font = fontChooser.getSelectedFont(); 
-    		    System.out.println("Selected Font : " + font);
-    		 }
+    		
     	 }
     }
     private class AbrirQuadrado implements ActionListener
