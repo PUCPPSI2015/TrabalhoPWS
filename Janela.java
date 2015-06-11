@@ -14,12 +14,9 @@ import java.util.*;
 import java.util.Timer;
 
 
-
 public class Janela extends JFrame 
 {
 	private static final long serialVersionUID = 1L;
-	
-	
 	
 	private JMenu mnuEArquivo   = new JMenu ("Arquivo"),
 				  mnuFiguras  = new JMenu ("Figuras"),
@@ -45,9 +42,6 @@ public class Janela extends JFrame
 	
 	private JButton btnApagar  = new JButton ("Apagar");
                     
-					
-					
-
     private MeuJPanel pnlDesenho = new MeuJPanel ();
     
     private JLabel statusBar1 = new JLabel ("Mensagem:"),
@@ -56,16 +50,15 @@ public class Janela extends JFrame
     boolean esperaPonto, esperaInicioReta, esperaFimReta, esperaInicioCirculo, esperaFimCirculo,
             esperaInicioElipse, esperaElipse, esperaFimElipse, esperaQuadrado, esperaFimQuadrado,
             esperaRetangulo, esperaFimRetangulo,esperaInicioTriangulo, esperaTriangulo, esperaFimTriangulo, 
-            Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, esperaEscreve, Sair, AbrirFontes, Exportar;
+            Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, esperaEscreve, Sair, Exportar;
 
     private Color corContorno = Color.black;
     private Color corInterior = new Color(0,0,0,0);
     private Ponto p1,p2,p3,p4;
+    private Font FonteEscolhida;
     
     private Vector<Figura> figuras = new Vector<Figura>();
     
-    
-
     public Janela ()
     {
         super("Editor Grafico");
@@ -240,9 +233,6 @@ public class Janela extends JFrame
         btnSair.addActionListener(new Sair());
         btnEscreve.addActionListener(new DesenhoEscreve() );
        
-        
-        
-        
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
             	pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
@@ -256,8 +246,6 @@ public class Janela extends JFrame
           }
         },0,10);
         
-        
-
         JPanel     pnlBotoes = new JPanel();
         JMenuBar    barMenus = new JMenuBar();
         FlowLayout flwBotoes = new FlowLayout(); 
@@ -288,12 +276,7 @@ public class Janela extends JFrame
         mnuTexto.add (btnEscreve);
         mnuTexto.add (btnFonte);
         
-        
-        
         pnlBotoes.add (btnApagar);
-
-
-        
 
         JPanel     pnlStatus = new JPanel();
         GridLayout grdStatus = new GridLayout(1,2);
@@ -452,7 +435,7 @@ public class Janela extends JFrame
                   JFrame frame = new JFrame();
                   String palavra = JOptionPane.showInputDialog(frame, "Digite a palavra:");
                   String c = palavra;
-                  figuras.add (new Escreve(e.getX(), e.getY(), c));
+                  figuras.add (new Escreve(e.getX(), e.getY(), c, FonteEscolhida));
                   figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                   statusBar1.setText("Mensagem:");    
                }
@@ -608,7 +591,6 @@ public class Janela extends JFrame
     		{      caminho = chooser.getSelectedFile().getAbsolutePath();
 	    		if(!caminho.equals(""))
 	    		{
-	    			
 	    			file = new File(caminho);
 	    			boolean existe = file.exists();
 	    			if(!existe){
@@ -628,7 +610,6 @@ public class Janela extends JFrame
 	        		      buffer.close();
 	        	          JOptionPane.showMessageDialog(null,"Arquivo gravado com " +
 	        	                  "sucesso","Conclu√≠do",JOptionPane.INFORMATION_MESSAGE);
-	        		      
 	    			   }
 	    			catch(Exception err)
 	    			{
@@ -711,10 +692,6 @@ public class Janela extends JFrame
  	 	 	 			            					figuras.add(new Escreve (linha));
  	 	 	 			            					figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  	 	 	 			            				}
- 			          
- 	 			            			
- 			          
- 						
  			         }
  					pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
  		            br.close(); 
@@ -726,7 +703,6 @@ public class Janela extends JFrame
      		}
          }
     }
-    
     
     private class Exportar implements ActionListener{
         public void actionPerformed (ActionEvent e)    
@@ -741,7 +717,6 @@ public class Janela extends JFrame
                {      caminho = chooser.getSelectedFile().getAbsolutePath();
                        if(!caminho.equals(""))
                        {
-                              
                                file = new File(caminho);
                                boolean existe = file.exists();
                                if(!existe){
@@ -777,13 +752,10 @@ public class Janela extends JFrame
             }
                else if(retorno==JFileChooser.CANCEL_OPTION)
                {
-                       JOptionPane.showMessageDialog(null,"O arquivo nÃ£o foi salvo! (lindo :3)");
+                       JOptionPane.showMessageDialog(null,"O arquivo nÃ£o foi exportado! (lindo :3)");
                }
         }
-
    }
-    
-    
     
     private class AbrirCorContorno implements ActionListener
     {
@@ -802,7 +774,13 @@ public class Janela extends JFrame
     {
     	 public void actionPerformed (ActionEvent e)   {
     		 JFontChooser fontChooser = new JFontChooser();
-    		
+    		 int result = fontChooser.showDialog(null);
+    		 if (result == JFontChooser.OK_OPTION)
+    		 {
+    		    Font font = fontChooser.getSelectedFont();
+    		    FonteEscolhida = font;
+    		    System.out.println("Selected Font : " + font);
+    		 }
     	 }
     }
     private class AbrirQuadrado implements ActionListener

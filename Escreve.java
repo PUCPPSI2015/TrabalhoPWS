@@ -1,29 +1,30 @@
 import java.awt.*;
 import java.util.*;
 
-//import javax.swing.JFrame;
-//import javax.swing.JOptionPane;
-
 public class Escreve extends Figura
 {
     protected int x,  y;
-    String c;
+    protected String c;
+    protected Font fonte;
+    
 
-    public Escreve (int x, int y, String c)
+    public Escreve (int x, int y, String c, Font f)
     {
         super ();
 
   	    this.x = x;
         this.y = y;
         this.c = c;
+        this.fonte = f;
     }
 	  
-    public Escreve (int x, int y, Color cor, Color corI)
+    public Escreve (int x, int y, String c, Font f, Color cor)
     {
-        super (cor,corI);
-
+        super (cor);
   	    this.x = x;
         this.y = y;
+        this.c = c;
+        this.fonte = f;
     }
 
     public Escreve (String s)
@@ -35,6 +36,7 @@ public class Escreve extends Figura
         this.x = Integer.parseInt(quebrador.nextToken());
         this.y = Integer.parseInt(quebrador.nextToken());
         this.c = quebrador.nextToken();
+        this.fonte = Font.getFont(quebrador.nextToken());
 
         this.corContorno = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                               		  Integer.parseInt(quebrador.nextToken()),  // G
@@ -50,6 +52,13 @@ public class Escreve extends Figura
     {
         this.y = y;
     }
+    public void setText (String c){
+    	this.c = c;
+    }
+    
+    public void setFont (Font f){
+    	this.fonte = f;
+    }
 	  
     public int getX ()
     {
@@ -60,9 +69,18 @@ public class Escreve extends Figura
     {
     	return this.y;
     }
+    public String getText ()
+    {
+    	return this.c;
+    }
+    
+    public Font getFont (){
+    	return this.fonte;
+    }
 	  
     public void torneSeVisivel (Graphics g, Graphics l)
     {
+    	g.setFont(this.fonte); 
         g.drawString(this.c, x, y);; 
     }
 
@@ -74,6 +92,8 @@ public class Escreve extends Figura
                this.y +
                ":" +
                this.c +
+               ":" +
+               this.fonte +
                ":" +
                this.getCorContorno().getRed() +
                ":" +
@@ -93,6 +113,8 @@ public class Escreve extends Figura
     	int resultado=1;
     	resultado = resultado*7 + this.x;
     	resultado = resultado*7 + this.y;
+    	resultado = resultado*7 + Integer.parseInt(this.c);
+    	resultado = resultado*7 + this.fonte.hashCode();
     	resultado = resultado*7 + this.corContorno.getRed();
     	resultado = resultado*7 + this.corContorno.getGreen();
     	resultado = resultado*7 + this.corContorno.getBlue();
@@ -114,6 +136,8 @@ public class Escreve extends Figura
     		
     		if(po.x                     == this.x                     && 
     		   po.y                     == this.y                     &&
+    		   po.c                     == this.c                     &&
+    		   po.fonte                 == this.fonte                 &&
     		   po.corContorno.getRed()  == this.corContorno.getRed()  &&
     		   po.corContorno.getBlue() == this.corContorno.getBlue() &&
     		   po.corContorno.getRed()  == this.corContorno.getRed())
@@ -132,6 +156,9 @@ public class Escreve extends Figura
         if (this.getY()<p.getY())
             return -7;
         
+        if (this.c.compareTo(p.c)<0)
+            return -7;
+        
         if (this.corContorno.getRed()<p.corContorno.getRed())
             return -7;
        
@@ -146,6 +173,9 @@ public class Escreve extends Figura
 
         if (this.getY()>p.getY())
            return 7;
+        
+        if (this.c.compareTo(p.c)>0)
+            return 7;
 
         if (this.corContorno.getRed()>p.corContorno.getRed())
              return 7;
@@ -165,7 +195,7 @@ public class Escreve extends Figura
 
         try
         {
-            p = new Escreve (this.getX(),this.getY(),this.corContorno,this.corInterior);
+            p = new Escreve (this.getX(),this.getY(), this.getText(), this.getFont(), this.corInterior);
         }
         catch (Exception erro)
         {}
@@ -175,7 +205,6 @@ public class Escreve extends Figura
     
     public Escreve (Escreve modelo)
     {
-    	this (modelo.getX(), modelo.getY(), modelo.corContorno,modelo.corInterior);
+    	this (modelo.getX(),modelo.getY(), modelo.getText(),modelo.fonte,modelo.corInterior);
     }
 }
-

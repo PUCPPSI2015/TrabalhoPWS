@@ -2,7 +2,7 @@ import java.awt.*;
 
 public abstract class Figura
 {
-    protected Color corContorno, corInterior;
+    protected Color corContorno, corInterior, cor;
 	  
     protected Figura ()
     {
@@ -14,6 +14,17 @@ public abstract class Figura
     {
         this.setCorContorno (cor);
         this.setCorInterior(corI);
+    }
+    
+    protected Figura (Color cor)
+    {
+        this.setCor(cor);
+    }
+   
+    
+    protected void setCor (Color cor)
+    {
+        this.cor = cor;
     }
 	  
     protected void setCorContorno (Color cor)
