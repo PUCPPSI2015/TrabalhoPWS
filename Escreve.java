@@ -3,8 +3,10 @@ import java.util.*;
 
 public class Escreve extends Figura
 {
-    protected int x,  y;
-    protected String c;
+	protected Ponto p1;
+    
+
+	protected String c;
     protected Font fonte;
     
 
@@ -12,8 +14,7 @@ public class Escreve extends Figura
     {
         super ();
 
-  	    this.x = x;
-        this.y = y;
+        this.p1 = new Ponto (x,y);
         this.c = c;
         this.fonte = f;
     }
@@ -21,8 +22,7 @@ public class Escreve extends Figura
     public Escreve (int x, int y, String c, Font f, Color cor)
     {
         super (cor);
-  	    this.x = x;
-        this.y = y;
+        this.p1 = new Ponto (x,y);
         this.c = c;
         this.fonte = f;
     }
@@ -33,25 +33,27 @@ public class Escreve extends Figura
 
         quebrador.nextToken();
 
-        this.x = Integer.parseInt(quebrador.nextToken());
-        this.y = Integer.parseInt(quebrador.nextToken());
-        this.c = quebrador.nextToken();
-        this.fonte = Font.getFont(quebrador.nextToken());
+        int x = Integer.parseInt(quebrador.nextToken());
 
+        int y = Integer.parseInt(quebrador.nextToken());
+        this.c = quebrador.nextToken().toString();
+        
+        String family = quebrador.nextToken();
+        int style = Integer.parseInt(quebrador.nextToken());
+        int size =  Integer.parseInt(quebrador.nextToken());
+        
+        
+        this.p1 = new Ponto (x,y);
         this.corContorno = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                               		  Integer.parseInt(quebrador.nextToken()),  // G
                                       Integer.parseInt(quebrador.nextToken())); // B
+        
+        this.fonte = new Font(family, style, size);
     }
 
-    public void setX (int x)
-    {
-        this.x = x;
-    }
-	  
-    public void setY (int y)
-    {
-        this.y = y;
-    }
+    public void setP1(Ponto p1) {
+		this.p1 = p1;
+	}
     public void setText (String c){
     	this.c = c;
     }
@@ -60,14 +62,9 @@ public class Escreve extends Figura
     	this.fonte = f;
     }
 	  
-    public int getX ()
+    public Ponto getP1 ()
     {
-        return this.x;
-    }
-	  
-    public int getY ()
-    {
-    	return this.y;
+        return this.p1;
     }
     public String getText ()
     {
@@ -81,26 +78,31 @@ public class Escreve extends Figura
     public void torneSeVisivel (Graphics g, Graphics l)
     {
     	g.setFont(this.fonte); 
-        g.drawString(this.c, x, y);; 
+    	g.setColor(this.corContorno); 
+        g.drawString(this.c, this.p1.getX(), this.p1.getY());
     }
 
     public String toString()
     {
+    	System.out.println( this.getCorContorno().getRed());
         return "s:" +
-               this.x +
+        		this.p1.getX() +
                ":" +
-               this.y +
+               this.p1.getY() +
                ":" +
                this.c +
                ":" +
-               this.fonte +
+               this.fonte.getFamily() +
+               ":" +
+               this.fonte.getStyle() +
+               ":" +
+               this.fonte.getSize() +
                ":" +
                this.getCorContorno().getRed() +
                ":" +
                this.getCorContorno().getGreen() +
                ":" +
-               this.getCorContorno().getBlue() +
-               ":";
+               this.getCorContorno().getBlue();
     }
     
     public String toSvg()
@@ -111,8 +113,7 @@ public class Escreve extends Figura
     public int hashCode()
     {
     	int resultado=1;
-    	resultado = resultado*7 + this.x;
-    	resultado = resultado*7 + this.y;
+    	
     	resultado = resultado*7 + Integer.parseInt(this.c);
     	resultado = resultado*7 + this.fonte.hashCode();
     	resultado = resultado*7 + this.corContorno.getRed();
@@ -123,7 +124,7 @@ public class Escreve extends Figura
     	 	
     }
     
-    public boolean equals(Object obj)
+    /* public boolean equals(Object obj)
     {
     	if (this==obj){
     		return true;
@@ -134,8 +135,8 @@ public class Escreve extends Figura
     	if (obj instanceof Escreve){
     		Escreve po = (Escreve)obj;
     		
-    		if(po.x                     == this.x                     && 
-    		   po.y                     == this.y                     &&
+    		//if(po.x                     == this.x                     && 
+    		  // po.y                     == this.y                     &&
     		   po.c                     == this.c                     &&
     		   po.fonte                 == this.fonte                 &&
     		   po.corContorno.getRed()  == this.corContorno.getRed()  &&
@@ -146,8 +147,9 @@ public class Escreve extends Figura
     		}
     	}
     	return false;
-    }
+    } */
     
+    /*
     public int compareTo (Escreve p)
     {
         if (this.getX()<p.getX())
@@ -206,5 +208,5 @@ public class Escreve extends Figura
     public Escreve (Escreve modelo)
     {
     	this (modelo.getX(),modelo.getY(), modelo.getText(),modelo.fonte,modelo.corInterior);
-    }
+    }*/
 }

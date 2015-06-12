@@ -18,13 +18,12 @@ public abstract class Figura
     
     protected Figura (Color cor)
     {
-        this.setCor(cor);
+        this.setCorContorno(cor);
     }
-   
     
     protected void setCor (Color cor)
     {
-        this.cor = cor;
+        this.corInterior = cor;
     }
 	  
     protected void setCorContorno (Color cor)

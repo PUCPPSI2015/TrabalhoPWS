@@ -1,3 +1,4 @@
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -26,7 +27,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
-<<<<<<< HEAD
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -42,678 +42,287 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
-
-public class JFontChooser extends JComponent {
-  
-  private static final long serialVersionUID = 1L;
-
-  public static final int OK_OPTION = 0;
-  
-  public static final int CANCEL_OPTION = 1;
-  
-  public static final int ERROR_OPTION = -1;
-  private static final Font DEFAULT_FONT = new Font("Dialog", Font.PLAIN, 12);
-  private static final int[] FONT_STYLE_CODES = { Font.PLAIN, Font.BOLD,
-      Font.ITALIC, Font.BOLD | Font.ITALIC };
-  private static final String[] DEFAULT_FONT_SIZE_STRINGS = { "8", "9", "10",
-      "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36",
-      "48", "72", };
-
-  protected int dialogResultValue = ERROR_OPTION;
-  private ResourceBundle messageCatalog = ResourceBundle.getBundle(
-      JFontChooser.class.getName() + "Messages", getLocale());
-
-  protected String _(String key) {
-    String value = key;
-    try {
-      value = messageCatalog.getString(key);
-    } catch (MissingResourceException e) {
-    }
-    return value;
-  }
-
-  private String[] fontStyleNames = null;
-  private String[] fontFamilyNames = null;
-  private String[] fontSizeStrings = null;
-  private JTextField fontFamilyTextField = null;
-  private JTextField fontStyleTextField = null;
-  private JTextField fontSizeTextField = null;
-  private JList fontNameList = null;
-  private JList fontStyleList = null;
-  private JList fontSizeList = null;
-  private JPanel fontNamePanel = null;
-  private JPanel fontStylePanel = null;
-  private JPanel fontSizePanel = null;
-  private JPanel samplePanel = null;
-  private JTextField sampleText = null;
-
-  public JFontChooser() {
-    this(DEFAULT_FONT_SIZE_STRINGS);
-  }
-
-  public JFontChooser(String[] fontSizeStrings) {
-    if (fontSizeStrings == null) {
-      fontSizeStrings = DEFAULT_FONT_SIZE_STRINGS;
-    }
-    this.fontSizeStrings = fontSizeStrings;
-
-    JPanel selectPanel = new JPanel();
-    selectPanel.setLayout(new BoxLayout(selectPanel, BoxLayout.X_AXIS));
-    selectPanel.add(getFontFamilyPanel());
-    selectPanel.add(getFontStylePanel());
-    selectPanel.add(getFontSizePanel());
-
-    JPanel contentsPanel = new JPanel();
-    contentsPanel.setLayout(new GridLayout(2, 1));
-    contentsPanel.add(selectPanel, BorderLayout.NORTH);
-    contentsPanel.add(getSamplePanel(), BorderLayout.CENTER);
-
-    this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-    this.add(contentsPanel);
-    this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-  }
-
-  public JTextField getFontFamilyTextField() {
-    if (fontFamilyTextField == null) {
-      fontFamilyTextField = new JTextField();
-      fontFamilyTextField
-          .addFocusListener(new TextFieldFocusHandlerForTextSelection(
-              fontFamilyTextField));
-      fontFamilyTextField
-          .addKeyListener(new TextFieldKeyHandlerForListSelectionUpDown(
-              getFontFamilyList()));
-      fontFamilyTextField.getDocument()
-          .addDocumentListener(
-              new ListSearchTextFieldDocumentHandler(
-                  getFontFamilyList()));
-      fontFamilyTextField.setFont(DEFAULT_FONT);
-
-    }
-    return fontFamilyTextField;
-  }
-
-  public JTextField getFontStyleTextField() {
-    if (fontStyleTextField == null) {
-      fontStyleTextField = new JTextField();
-      fontStyleTextField
-          .addFocusListener(new TextFieldFocusHandlerForTextSelection(
-              fontStyleTextField));
-      fontStyleTextField
-          .addKeyListener(new TextFieldKeyHandlerForListSelectionUpDown(
-              getFontStyleList()));
-      fontStyleTextField.getDocument().addDocumentListener(
-          new ListSearchTextFieldDocumentHandler(getFontStyleList()));
-      fontStyleTextField.setFont(DEFAULT_FONT);
-    }
-    return fontStyleTextField;
-  }
-
-  public JTextField getFontSizeTextField() {
-    if (fontSizeTextField == null) {
-      fontSizeTextField = new JTextField();
-      fontSizeTextField
-          .addFocusListener(new TextFieldFocusHandlerForTextSelection(
-              fontSizeTextField));
-      fontSizeTextField
-          .addKeyListener(new TextFieldKeyHandlerForListSelectionUpDown(
-              getFontSizeList()));
-      fontSizeTextField.getDocument().addDocumentListener(
-          new ListSearchTextFieldDocumentHandler(getFontSizeList()));
-      fontSizeTextField.setFont(DEFAULT_FONT);
-    }
-    return fontSizeTextField;
-  }
-
-  public JList getFontFamilyList() {
-    if (fontNameList == null) {
-      fontNameList = new JList(getFontFamilies());
-      fontNameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      fontNameList.addListSelectionListener(new ListSelectionHandler(
-          getFontFamilyTextField()));
-      fontNameList.setSelectedIndex(0);
-      fontNameList.setFont(DEFAULT_FONT);
-      fontNameList.setFocusable(false);
-    }
-    return fontNameList;
-  }
-
-  public JList getFontStyleList() {
-    if (fontStyleList == null) {
-      fontStyleList = new JList(getFontStyleNames());
-      fontStyleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      fontStyleList.addListSelectionListener(new ListSelectionHandler(
-          getFontStyleTextField()));
-      fontStyleList.setSelectedIndex(0);
-      fontStyleList.setFont(DEFAULT_FONT);
-      fontStyleList.setFocusable(false);
-    }
-    return fontStyleList;
-  }
-
-  public JList getFontSizeList() {
-    if (fontSizeList == null) {
-      fontSizeList = new JList(this.fontSizeStrings);
-      fontSizeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      fontSizeList.addListSelectionListener(new ListSelectionHandler(
-          getFontSizeTextField()));
-      fontSizeList.setSelectedIndex(0);
-      fontSizeList.setFont(DEFAULT_FONT);
-      fontSizeList.setFocusable(false);
-    }
-    return fontSizeList;
-  }
-
-  public String getSelectedFontFamily() {
-    String fontName = (String) getFontFamilyList().getSelectedValue();
-    return fontName;
-  }
-
-  public int getSelectedFontStyle() {
-    int index = getFontStyleList().getSelectedIndex();
-    return FONT_STYLE_CODES[index];
-  }
-
-  public int getSelectedFontSize() {
-    int fontSize = 1;
-    String fontSizeString = getFontSizeTextField().getText();
-    while (true) {
-      try {
-        fontSize = Integer.parseInt(fontSizeString);
-        break;
-      } catch (NumberFormatException e) {
-        fontSizeString = (String) getFontSizeList().getSelectedValue();
-        getFontSizeTextField().setText(fontSizeString);
-      }
-    }
-
-    return fontSize;
-  }
-
-  public Font getSelectedFont() {
-    Font font = new Font(getSelectedFontFamily(), getSelectedFontStyle(),
-        getSelectedFontSize());
-    return font;
-  }
-
-  public void setSelectedFontFamily(String name) {
-    String[] names = getFontFamilies();
-    for (int i = 0; i < names.length; i++) {
-      if (names[i].toLowerCase().equals(name.toLowerCase())) {
-        getFontFamilyList().setSelectedIndex(i);
-        break;
-      }
-    }
-    updateSampleFont();
-  }
-
-  public void setSelectedFontStyle(int style) {
-    for (int i = 0; i < FONT_STYLE_CODES.length; i++) {
-      if (FONT_STYLE_CODES[i] == style) {
-        getFontStyleList().setSelectedIndex(i);
-        break;
-      }
-    }
-    updateSampleFont();
-  }
-
-  public void setSelectedFontSize(int size) {
-    String sizeString = String.valueOf(size);
-    for (int i = 0; i < this.fontSizeStrings.length; i++) {
-      if (this.fontSizeStrings[i].equals(sizeString)) {
-        getFontSizeList().setSelectedIndex(i);
-        break;
-      }
-    }
-    getFontSizeTextField().setText(sizeString);
-    updateSampleFont();
-  }
-
-  public void setSelectedFont(Font font) {
-    setSelectedFontFamily(font.getFamily());
-    setSelectedFontStyle(font.getStyle());
-    setSelectedFontSize(font.getSize());
-  }
-
-  public String getVersionString() {
-    return _("Version");
-  }
-
-  public int showDialog(Component parent) {
-    dialogResultValue = ERROR_OPTION;
-    JDialog dialog = createDialog(parent);
-    dialog.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-        dialogResultValue = CANCEL_OPTION;
-      }
-    });
-    dialog.setVisible(true);
-    dialog.dispose();
-    dialog = null;
-
-    return dialogResultValue;
-  }
-
-  protected class ListSelectionHandler implements ListSelectionListener {
-    private JTextComponent textComponent;
-
-    ListSelectionHandler(JTextComponent textComponent) {
-      this.textComponent = textComponent;
-    }
-
-    public void valueChanged(ListSelectionEvent e) {
-      if (e.getValueIsAdjusting() == false) {
-        JList list = (JList) e.getSource();
-        String selectedValue = (String) list.getSelectedValue();
-=======
-import javax.swing.JMenu;
-import javax.swing.JScrollPane;
-
-public class JFontChooser extends JFrame {//Temos que extender essa classe com JFrame;
-
-    JMenu label; //aqui e crio um JLabel;
-    private Component fontListModel;
-    private JScrollPane fontListScroller;
-    protected JList list;
-    protected JScrollPane scrollPane;
-    protected String[] nomedasfont;
-
-    //neste ponto eu crio o construtor da "tela":
-    public JFontChooser() {
-
-        setVisible(true); //esse método permite a tela ser visível, ou seja só aparece se estiver "true";
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //adicionei isso para encerrar a aplicação quando clicar no "X";
-        setSize(500, 500); //tamanho da tela;
-        
-        
-        
-        
-        Vector<Font> fonts = new Vector<Font>();
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-                for (Font font : ge.getAllFonts()) {
-                    if (font.canDisplayUpTo(font.getName()) != 0) {
-                        fonts.add(font);
-                    }
-                }
-        
-        
-        
-        
-        
-        label = new JMenu();
-       
-       
-        label.setText("Hello World"); //você pode editar o texto que o JLabel vai exibir usando esse método;
-
-        //aqui que vamos alterar a fonte. Nesse método você pode alterar o tipo da fonte, o estilo da fonte e o tamanho;
-        label.setFont(new Font("Times New Roman", 
-                Font.BOLD // aqui você coloca o estilo que pode ser BOLD, PLAIN, ITALIC
-                , 90));
-
-
-        
-        list = new JList(fonts);
-        scrollPane = new JScrollPane(list);
-        
-        this.add(scrollPane);
-
-    }
-}
->>>>>>> parent of f811488... BOTAO SELECT
-
-        String oldValue = textComponent.getText();
-        textComponent.setText(selectedValue);
-        if (!oldValue.equalsIgnoreCase(selectedValue)) {
-          textComponent.selectAll();
-          textComponent.requestFocus();
-        }
-
-        updateSampleFont();
-      }
-    }
-  }
-
-  protected class TextFieldFocusHandlerForTextSelection extends FocusAdapter {
-    private JTextComponent textComponent;
-
-    public TextFieldFocusHandlerForTextSelection(
-        JTextComponent textComponent) {
-      this.textComponent = textComponent;
-    }
-
-    public void focusGained(FocusEvent e) {
-      textComponent.selectAll();
-    }
-
-    public void focusLost(FocusEvent e) {
-      textComponent.select(0, 0);
-      updateSampleFont();
-    }
-  }
-
-  protected class TextFieldKeyHandlerForListSelectionUpDown extends
-      KeyAdapter {
-    private JList targetList;
-
-    public TextFieldKeyHandlerForListSelectionUpDown(JList list) {
-      this.targetList = list;
-    }
-
-    public void keyPressed(KeyEvent e) {
-      int i = targetList.getSelectedIndex();
-      switch (e.getKeyCode()) {
-      case KeyEvent.VK_UP:
-        i = targetList.getSelectedIndex() - 1;
-        if (i < 0) {
-          i = 0;
-        }
-        targetList.setSelectedIndex(i);
-        break;
-      case KeyEvent.VK_DOWN:
-        int listSize = targetList.getModel().getSize();
-        i = targetList.getSelectedIndex() + 1;
-        if (i >= listSize) {
-          i = listSize - 1;
-        }
-        targetList.setSelectedIndex(i);
-        break;
-      default:
-        break;
-      }
-    }
-  }
-
-  protected class ListSearchTextFieldDocumentHandler implements
-      DocumentListener {
-    JList targetList;
-
-    public ListSearchTextFieldDocumentHandler(JList targetList) {
-      this.targetList = targetList;
-    }
-
-    public void insertUpdate(DocumentEvent e) {
-      update(e);
-    }
-
-    public void removeUpdate(DocumentEvent e) {
-      update(e);
-    }
-
-    public void changedUpdate(DocumentEvent e) {
-      update(e);
-    }
-
-    private void update(DocumentEvent event) {
-      String newValue = "";
-      try {
-        Document doc = event.getDocument();
-        newValue = doc.getText(0, doc.getLength());
-      } catch (BadLocationException e) {
-        e.printStackTrace();
-      }
-
-      if (newValue.length() > 0) {
-        int index = targetList.getNextMatch(newValue, 0,
-            Position.Bias.Forward);
-        if (index < 0) {
-          index = 0;
-        }
-        targetList.ensureIndexIsVisible(index);
-
-        String matchedName = targetList.getModel().getElementAt(index)
-            .toString();
-        if (newValue.equalsIgnoreCase(matchedName)) {
-          if (index != targetList.getSelectedIndex()) {
-            SwingUtilities.invokeLater(new ListSelector(index));
-          }
-        }
-      }
-    }
-
-    public class ListSelector implements Runnable {
-      private int index;
-
-      public ListSelector(int index) {
-        this.index = index;
-      }
-
-      public void run() {
-        targetList.setSelectedIndex(this.index);
-      }
-    }
-  }
-
-  protected class DialogOKAction extends AbstractAction {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	protected static final String ACTION_NAME = "OK";
-    private JDialog dialog;
-
-    protected DialogOKAction(JDialog dialog) {
-      this.dialog = dialog;
-      putValue(Action.DEFAULT, ACTION_NAME);
-      putValue(Action.ACTION_COMMAND_KEY, ACTION_NAME);
-      putValue(Action.NAME, _(ACTION_NAME));
-    }
-
-    public void actionPerformed(ActionEvent e) {
-      dialogResultValue = OK_OPTION;
-      dialog.setVisible(false);
-    }
-  }
-
-  protected class DialogCancelAction extends AbstractAction {
+public class JFontChooser extends javax.swing.JDialog {
+    /** A return status code - returned if Cancel button has been pressed */
+    public static final int RET_CANCEL = 0;
+    /** A return status code - returned if OK button has been pressed */
+    public static final int RET_OK = 1;
+    //the font
+    private Font font;
     
-	private static final long serialVersionUID = 1L;
-	protected static final String ACTION_NAME = "Cancel";
-    private JDialog dialog;
-
-    protected DialogCancelAction(JDialog dialog) {
-      this.dialog = dialog;
-      putValue(Action.DEFAULT, ACTION_NAME);
-      putValue(Action.ACTION_COMMAND_KEY, ACTION_NAME);
-      putValue(Action.NAME, _(ACTION_NAME));
+    //Constructors
+    /** Creates new form JFontChooser */
+    public JFontChooser(java.awt.Frame parent, Font font) {
+        super(parent);
+        this.font = font;
+        initComponents();
+        lblPreview.setFont(font);
     }
-
-    public void actionPerformed(ActionEvent e) {
-      dialogResultValue = CANCEL_OPTION;
-      dialog.setVisible(false);
+    
+    public JFontChooser(java.awt.Frame parent) {
+        super(parent);
+        this.font = new Font("Dialog",Font.PLAIN,12);
+        initComponents();
+        lblPreview.setFont(font);
     }
-  }
-
-  protected JDialog createDialog(Component parent) {
-    Frame frame = parent instanceof Frame ? (Frame) parent
-        : (Frame) SwingUtilities
-            .getAncestorOfClass(Frame.class, parent);
-    JDialog dialog = new JDialog(frame, _("SelectFont"), true);
-
-    Action okAction = new DialogOKAction(dialog);
-    Action cancelAction = new DialogCancelAction(dialog);
-
-    JButton okButton = new JButton(okAction);
-    okButton.setFont(DEFAULT_FONT);
-    JButton cancelButton = new JButton(cancelAction);
-    cancelButton.setFont(DEFAULT_FONT);
-
-    JPanel buttonsPanel = new JPanel();
-    buttonsPanel.setLayout(new GridLayout(2, 1));
-    buttonsPanel.add(okButton);
-    buttonsPanel.add(cancelButton);
-    buttonsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 10));
-
-    ActionMap actionMap = buttonsPanel.getActionMap();
-    actionMap.put(cancelAction.getValue(Action.DEFAULT), cancelAction);
-    actionMap.put(okAction.getValue(Action.DEFAULT), okAction);
-    InputMap inputMap = buttonsPanel
-        .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-    inputMap.put(KeyStroke.getKeyStroke("ESCAPE"),
-        cancelAction.getValue(Action.DEFAULT));
-    inputMap.put(KeyStroke.getKeyStroke("ENTER"),
-        okAction.getValue(Action.DEFAULT));
-
-    JPanel dialogEastPanel = new JPanel();
-    dialogEastPanel.setLayout(new BorderLayout());
-    dialogEastPanel.add(buttonsPanel, BorderLayout.NORTH);
-    dialog.getContentPane().add(this, BorderLayout.CENTER);
-    dialog.getContentPane().add(dialogEastPanel, BorderLayout.EAST);
-    dialog.pack();
-    dialog.setLocationRelativeTo(frame);
-    return dialog;
-  }
-
-  protected void updateSampleFont() {
-    Font font = getSelectedFont();
-    getSampleTextField().setFont(font);
-  }
-
-  protected JPanel getFontFamilyPanel() {
-    if (fontNamePanel == null) {
-      fontNamePanel = new JPanel();
-      fontNamePanel.setLayout(new BorderLayout());
-      fontNamePanel
-          .setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-      fontNamePanel.setPreferredSize(new Dimension(180, 150));
-
-      JScrollPane scrollPane = new JScrollPane(getFontFamilyList());
-      scrollPane.getVerticalScrollBar().setFocusable(false);
-      scrollPane
-          .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-      JPanel p = new JPanel();
-      p.setLayout(new BorderLayout());
-      p.add(getFontFamilyTextField(), BorderLayout.NORTH);
-      p.add(scrollPane, BorderLayout.CENTER);
-
-      JLabel label = new JLabel(_("FontName"));
-      label.setHorizontalAlignment(JLabel.LEFT);
-      label.setHorizontalTextPosition(JLabel.LEFT);
-      label.setLabelFor(getFontFamilyTextField());
-      label.setDisplayedMnemonic('F');
-
-      fontNamePanel.add(label, BorderLayout.NORTH);
-      fontNamePanel.add(p, BorderLayout.CENTER);
-
+    
+    public JFontChooser(Font font) {
+        super((javax.swing.JFrame)null);
+        this.font = font;
+        initComponents();
+        lblPreview.setFont(font);
     }
-    return fontNamePanel;
-  }
-
-  protected JPanel getFontStylePanel() {
-    if (fontStylePanel == null) {
-      fontStylePanel = new JPanel();
-      fontStylePanel.setLayout(new BorderLayout());
-      fontStylePanel.setBorder(BorderFactory
-          .createEmptyBorder(5, 5, 5, 5));
-      fontStylePanel.setPreferredSize(new Dimension(140, 150));
-
-      JScrollPane scrollPane = new JScrollPane(getFontStyleList());
-      scrollPane.getVerticalScrollBar().setFocusable(false);
-      scrollPane
-          .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-      JPanel p = new JPanel();
-      p.setLayout(new BorderLayout());
-      p.add(getFontStyleTextField(), BorderLayout.NORTH);
-      p.add(scrollPane, BorderLayout.CENTER);
-
-      JLabel label = new JLabel(_("FontStyle"));
-      label.setHorizontalAlignment(JLabel.LEFT);
-      label.setHorizontalTextPosition(JLabel.LEFT);
-      label.setLabelFor(getFontStyleTextField());
-      label.setDisplayedMnemonic('Y');
-
-      fontStylePanel.add(label, BorderLayout.NORTH);
-      fontStylePanel.add(p, BorderLayout.CENTER);
+    
+    public JFontChooser() {
+        super((javax.swing.JFrame)null);
+        this.font = new Font("Dialog",Font.PLAIN,12);
+        initComponents();
+        lblPreview.setFont(font);
     }
-    return fontStylePanel;
-  }
-
-  protected JPanel getFontSizePanel() {
-    if (fontSizePanel == null) {
-      fontSizePanel = new JPanel();
-      fontSizePanel.setLayout(new BorderLayout());
-      fontSizePanel.setPreferredSize(new Dimension(70, 150));
-      fontSizePanel
-          .setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-      JScrollPane scrollPane = new JScrollPane(getFontSizeList());
-      scrollPane.getVerticalScrollBar().setFocusable(false);
-      scrollPane
-          .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-      JPanel p = new JPanel();
-      p.setLayout(new BorderLayout());
-      p.add(getFontSizeTextField(), BorderLayout.NORTH);
-      p.add(scrollPane, BorderLayout.CENTER);
-
-      JLabel label = new JLabel(_("FontSize"));
-      label.setHorizontalAlignment(JLabel.LEFT);
-      label.setHorizontalTextPosition(JLabel.LEFT);
-      label.setLabelFor(getFontSizeTextField());
-      label.setDisplayedMnemonic('S');
-
-      fontSizePanel.add(label, BorderLayout.NORTH);
-      fontSizePanel.add(p, BorderLayout.CENTER);
+    
+    /** @return the font chosen by the user */
+    public Font getFont(){
+        return font;
     }
-    return fontSizePanel;
-  }
-
-  protected JPanel getSamplePanel() {
-    if (samplePanel == null) {
-      Border titledBorder = BorderFactory.createTitledBorder(
-          BorderFactory.createEtchedBorder(), _("Sample"));
-      Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
-      Border border = BorderFactory.createCompoundBorder(titledBorder,
-          empty);
-
-      samplePanel = new JPanel();
-      samplePanel.setLayout(new BorderLayout());
-      samplePanel.setBorder(border);
-
-      samplePanel.add(getSampleTextField(), BorderLayout.CENTER);
+    
+    /** @return the return status of this dialog - one of RET_OK or RET_CANCEL */
+    public int getReturnStatus() {
+        return returnStatus;
     }
-    return samplePanel;
-  }
+    
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    private void initComponents() {//GEN-BEGIN:initComponents
+        java.awt.GridBagConstraints gridBagConstraints;
 
-  protected JTextField getSampleTextField() {
-    if (sampleText == null) {
-      Border lowered = BorderFactory.createLoweredBevelBorder();
+        mainPanel = new javax.swing.JPanel();
+        fontPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstFont = new javax.swing.JList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstStyle = new javax.swing.JList();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        lstSize = new javax.swing.JList();
+        previewPanel = new javax.swing.JPanel();
+        lblPreview = new javax.swing.JLabel();
+        buttonPanel = new javax.swing.JPanel();
+        okButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
-      sampleText = new JTextField(_("SampleString"));
-      sampleText.setBorder(lowered);
-      sampleText.setPreferredSize(new Dimension(300, 80));
+        setTitle("Select Font");
+        setModal(true);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                closeDialog(evt);
+            }
+        });
+
+        mainPanel.setLayout(new java.awt.GridLayout(2, 1));
+
+        fontPanel.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setText("Font");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.weightx = 2.0;
+        fontPanel.add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Style");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        fontPanel.add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Size");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.weightx = 0.2;
+        fontPanel.add(jLabel3, gridBagConstraints);
+
+        lstFont.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstFont.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstFontValueChanged(evt);
+            }
+        });
+
+        jScrollPane1.setViewportView(lstFont);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.weightx = 2.0;
+        fontPanel.add(jScrollPane1, gridBagConstraints);
+
+        lstStyle.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Plain", "Bold", "Italic", "Bold Italic" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        lstStyle.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstStyle.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstStyleValueChanged(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(lstStyle);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        fontPanel.add(jScrollPane2, gridBagConstraints);
+
+        lstSize.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "8", "10", "11", "12", "14", "16", "20", "24", "28", "36", "48", "72", "96" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        lstSize.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstSize.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstSizeValueChanged(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(lstSize);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.weightx = 0.2;
+        fontPanel.add(jScrollPane3, gridBagConstraints);
+
+        mainPanel.add(fontPanel);
+
+        previewPanel.setLayout(new java.awt.BorderLayout());
+
+        previewPanel.setBorder(new javax.swing.border.TitledBorder(null, "Preview", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12)));
+        lblPreview.setFont(new java.awt.Font("Dialog", 0, 12));
+        lblPreview.setText("ABCDEFG abcdefg");
+        previewPanel.add(lblPreview, java.awt.BorderLayout.CENTER);
+
+        mainPanel.add(previewPanel);
+
+        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+
+        buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+
+        buttonPanel.add(okButton);
+
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
+        buttonPanel.add(cancelButton);
+
+        getContentPane().add(buttonPanel, java.awt.BorderLayout.SOUTH);
+
+        pack();
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(new java.awt.Dimension(443, 429));
+        setLocation((screenSize.width-443)/2,(screenSize.height-429)/2);
+    }//GEN-END:initComponents
+
+    private void lstStyleValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstStyleValueChanged
+        int style = -1;
+        String selStyle = (String)lstStyle.getSelectedValue();
+        if(selStyle=="Plain")
+            style = Font.PLAIN;
+        if(selStyle=="Bold")
+            style = Font.BOLD;
+        if(selStyle=="Italic")
+            style = Font.ITALIC;
+        if(selStyle=="Bold Italic")
+            style = Font.BOLD + Font.ITALIC;
+        
+        font = new Font(font.getFamily(),style,font.getSize());
+        lblPreview.setFont(font);
+    }//GEN-LAST:event_lstStyleValueChanged
+
+    private void lstSizeValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstSizeValueChanged
+        int size = Integer.parseInt((String)lstSize.getSelectedValue());
+        font = new Font(font.getFamily(),font.getStyle(),size);
+        lblPreview.setFont(font);
+    }//GEN-LAST:event_lstSizeValueChanged
+
+    private void lstFontValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFontValueChanged
+        font = new Font((String)lstFont.getSelectedValue(),font.getStyle(),font.getSize());
+        lblPreview.setFont(font);
+    }//GEN-LAST:event_lstFontValueChanged
+    
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        doClose(RET_OK);
+    }//GEN-LAST:event_okButtonActionPerformed
+    
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        doClose(RET_CANCEL);
+    }//GEN-LAST:event_cancelButtonActionPerformed
+    
+    /** Closes the dialog */
+    private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
+        doClose(RET_CANCEL);
+    }//GEN-LAST:event_closeDialog
+    
+    private void doClose(int retStatus) {
+        returnStatus = retStatus;
+        setVisible(false);
     }
-    return sampleText;
-  }
-
-  protected String[] getFontFamilies() {
-    if (fontFamilyNames == null) {
-      GraphicsEnvironment env = GraphicsEnvironment
-          .getLocalGraphicsEnvironment();
-      fontFamilyNames = env.getAvailableFontFamilyNames();
+    
+    /**
+     * @param args the command line arguments
+     *  main used for testing purposes only
+     */
+    public static void main(String args[]) {
+        new JFontChooser().show();
     }
-    return fontFamilyNames;
-  }
-
-  protected String[] getFontStyleNames() {
-    if (fontStyleNames == null) {
-      int i = 0;
-      fontStyleNames = new String[4];
-      fontStyleNames[i++] = _("Plain");
-      fontStyleNames[i++] = _("Bold");
-      fontStyleNames[i++] = _("Italic");
-      fontStyleNames[i++] = _("BoldItalic");
-    }
-    return fontStyleNames;
-  }
-
-  public String getSelectedFontDesp() {
-    Font selectedFont = getSelectedFont();
-    if (selectedFont != null) {
-      return selectedFont.getName() + " "
-          + fontStyleNames[selectedFont.getStyle()] + " "
-          + selectedFont.getSize();
-    }
-    return "";
-  }
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel fontPanel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JList lstSize;
+    private javax.swing.JButton okButton;
+    private javax.swing.JList lstFont;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList lstStyle;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JPanel previewPanel;
+    private javax.swing.JLabel lblPreview;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JScrollPane jScrollPane3;
+    // End of variables declaration//GEN-END:variables
+    
+    private int returnStatus = RET_CANCEL;
 }

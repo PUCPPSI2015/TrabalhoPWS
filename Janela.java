@@ -55,7 +55,7 @@ public class Janela extends JFrame
     private Color corContorno = Color.black;
     private Color corInterior = new Color(0,0,0,0);
     private Ponto p1,p2,p3,p4;
-    private Font FonteEscolhida;
+    private Font FonteEscolhida = new Font("Serif", Font.ITALIC, 20);
     
     private Vector<Figura> figuras = new Vector<Figura>();
     
@@ -435,7 +435,7 @@ public class Janela extends JFrame
                   JFrame frame = new JFrame();
                   String palavra = JOptionPane.showInputDialog(frame, "Digite a palavra:");
                   String c = palavra;
-                  figuras.add (new Escreve(e.getX(), e.getY(), c, FonteEscolhida));
+                  figuras.add (new Escreve(e.getX(), e.getY(), c, FonteEscolhida,  corContorno));
                   figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
                   statusBar1.setText("Mensagem:");    
                }
@@ -723,10 +723,10 @@ public class Janela extends JFrame
                                        file = new File(caminho+".html");
                                }
                                else{
-                                       JOptionPane.showMessageDialog(null,"O arquivo jï¿½ ecziste! Deseja substituï¿½-lo??? (te amo :3)");
+                                       JOptionPane.showMessageDialog(null,"O arquivo ja existe! Deseja substitui-lo???");
                                }
                               
-                                       String stringFinal = "<svg version='1.1' id='editorExported' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' style='position: absolute;'width='100%' height='100%'  xml:space='preserve'>";
+                                       String stringFinal = "<style>*{padding: 0;} svg * {transform-origin: 50% 50%;animation: giragostoso 10s linear infinite ;}@keyframes giragostoso {from {transform: rotateX(10deg) rotateY(-360deg);}to {ransform: rotateX(10deg) rotateY(0deg);}}</style><svg version='1.1' id='editorExported' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' style='position: absolute;'width='100%' height='100%'  xml:space='preserve'>";
                                        for(int i = 0; i < figuras.size(); i++)
                                        {
                                                stringFinal += figuras.get(i).toSvg();
@@ -774,10 +774,10 @@ public class Janela extends JFrame
     {
     	 public void actionPerformed (ActionEvent e)   {
     		 JFontChooser fontChooser = new JFontChooser();
-    		 int result = fontChooser.showDialog(null);
-    		 if (result == JFontChooser.OK_OPTION)
+    		 fontChooser.show();
+    		 if (fontChooser.getReturnStatus() == fontChooser.RET_OK)
     		 {
-    		    Font font = fontChooser.getSelectedFont();
+    		    Font font = fontChooser.getFont();
     		    FonteEscolhida = font;
     		    System.out.println("Selected Font : " + font);
     		 }
