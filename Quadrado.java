@@ -42,7 +42,7 @@ public class Quadrado extends Figura {
         if(this.h < 0) this.h = -this.h;
         
         
-        if(this.w > this.h) this.lado = this.w;
+        if(this.w < this.h) this.lado = this.w;
         else this.lado = this.h;
        
     }
@@ -88,7 +88,7 @@ public class Quadrado extends Figura {
         if(this.w < 0) this.w = -this.w;
         this.h = p1.getY() - p2.getY();
         if(this.h < 0) this.h = -this.h;
-        if(this.w > this.h) this.lado = this.w;
+        if(this.w < this.h) this.lado = this.w;
         else this.lado = this.h;
         
         
@@ -129,8 +129,8 @@ public class Quadrado extends Figura {
     {
         g.setColor(this.corContorno);
         l.setColor(this.corInterior);
-        g.drawRect(pbase.getX(), pbase.getY(), lado, lado);
-        l.fillRect(pbase.getX()+1, pbase.getY()+1, lado-1, lado-1);
+        g.drawRect(this.pbase.getX(), this.pbase.getY(), this.lado, this.lado);
+        l.fillRect(this.pbase.getX()+1, this.pbase.getY()+1, this.lado-1, this.lado-1);
     }
 
     public String toString()
