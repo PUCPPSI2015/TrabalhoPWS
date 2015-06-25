@@ -3,29 +3,26 @@ import java.util.*;
 
 public class Circulo extends Figura
 {
-    protected Ponto centro;
+    protected Ponto canto;
     protected int   raio;
 	
     public Circulo (int x, int y, int r)
     {
         super ();
-
-        this.centro = new Ponto (x,y);
+        this.canto = new Ponto (x,y);
         this.raio   = r;
     }
 	
     public Circulo (int x, int y, int r, Color cor, Color corI)
     {
         super (cor, corI);
-
-        this.centro = new Ponto (x,y);
+        this.canto = new Ponto (x,y);
         this.raio   = r;
     }
 
     public Circulo (String s)
     {
         StringTokenizer quebrador = new StringTokenizer(s,":");
-
         quebrador.nextToken();
 
         int   x   = Integer.parseInt(quebrador.nextToken());
@@ -42,15 +39,15 @@ public class Circulo extends Figura
                 				Integer.parseInt(quebrador.nextToken()),  // B
                 				Integer.parseInt(quebrador.nextToken())); // A
 
-        this.centro = new Ponto (x,y,cor,corI);
+        this.canto = new Ponto (x,y,cor,corI);
         this.raio   = r;
         this.corContorno    = cor;
         this.corInterior    = corI;
     }
 
-    public void setCentro (int x, int y)
+    public void setCanto (int x, int y)
     {
-        this.centro = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
+        this.canto = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
     }
 
     public void setRaio (int r)
@@ -58,9 +55,9 @@ public class Circulo extends Figura
         this.raio = r;
     }
 
-    public Ponto getCentro ()
+    public Ponto getCanto ()
     {
-        return this.centro;
+        return this.canto;
     }
 
     public int getRaio ()
@@ -72,17 +69,17 @@ public class Circulo extends Figura
     {
     	l.setColor (this.corInterior);
         g.setColor (this.corContorno);
-        l.fillOval (this.centro.getX()-raio, this.centro.getY()-raio, 2*raio, 2*raio);
-        g.drawOval (this.centro.getX()-raio, this.centro.getY()-raio, 2*raio, 2*raio);
+        l.fillOval (this.canto.getX(), this.canto.getY(), raio, raio);
+        g.drawOval (this.canto.getX(), this.canto.getY(), raio, raio);
 			
     }
 
     public String toString()
     {
         return "c:" +
-               this.centro.getX() +
+               this.canto.getX() +
                ":" +
-               this.centro.getY() +
+               this.canto.getY() +
                ":" +
                this.raio +
                ":" +
@@ -104,8 +101,8 @@ public class Circulo extends Figura
     public String toSvg()
     {
         return "<circle " +
-               "cx='" + this.centro.getX() + "' " +
-               "cy='" + this.centro.getY() + "' " +
+               "cx='" + this.canto.getX() + "' " +
+               "cy='" + this.canto.getY() + "' " +
                "r='" + raio + "' " +
                "style='fill: rgb(" + this.getCorInterior().getRed() +
                "," + this.getCorInterior().getGreen() +
@@ -122,8 +119,8 @@ public class Circulo extends Figura
     	int resultado =1;
     	
     	resultado = resultado*7 + this.raio;
-    	resultado = resultado*7 + this.centro.getX();
-    	resultado = resultado*7 + this.centro.getY();
+    	resultado = resultado*7 + this.canto.getX();
+    	resultado = resultado*7 + this.canto.getY();
     	resultado = resultado*7 + this.corContorno.getRed();
     	resultado = resultado*7 + this.corContorno.getGreen();
     	resultado = resultado*7 + this.corContorno.getBlue();
@@ -143,7 +140,7 @@ public class Circulo extends Figura
         {
         	Circulo cir = (Circulo)obj;
 
-            if (cir.centro    == this.centro   &&
+            if (cir.canto    == this.canto   &&
             	cir.raio == this.raio          &&
             	cir.corContorno == this.corContorno)
                 return true;
@@ -153,10 +150,10 @@ public class Circulo extends Figura
     
     public int compareTo (Circulo c)
     {
-        if (this.centro.getX()<c.centro.getX())
+        if (this.canto.getX()<c.canto.getX())
              return -7;
 
-        if (this.centro.getY()<c.centro.getY())
+        if (this.canto.getY()<c.canto.getY())
             return -7;
 
         if (this.raio<c.raio)
@@ -171,10 +168,10 @@ public class Circulo extends Figura
        if (this.corContorno.getBlue()<c.corContorno.getBlue())
            return -7;
         
-        if (this.centro.getX()>c.centro.getX())
+        if (this.canto.getX()>c.canto.getX())
             return 7;
 
-        if (this.centro.getY()>c.centro.getY())
+        if (this.canto.getY()>c.canto.getY())
            return 7;
         
         if (this.raio>c.raio)
@@ -198,7 +195,7 @@ public class Circulo extends Figura
 
         try
         {
-            c = new Circulo (this.centro.getX(),this.centro.getY(),this.raio,this.corContorno,this.corInterior);
+            c = new Circulo (this.canto.getX(),this.canto.getY(),this.raio,this.corContorno,this.corInterior);
         }
         catch (Exception erro)
         {}
@@ -208,7 +205,7 @@ public class Circulo extends Figura
     
     public Circulo (Circulo modelo)
     {
-    	this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio,modelo.corContorno,modelo.corInterior);
+    	this (modelo.getCanto().getX(), modelo.getCanto().getY(), modelo.raio,modelo.corContorno,modelo.corInterior);
     }
     
 }

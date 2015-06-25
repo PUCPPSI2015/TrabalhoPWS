@@ -87,10 +87,11 @@ public class Elipse extends Figura
 
     public void torneSeVisivel (Graphics g, Graphics l)
     {
-        g.setColor (this.corContorno);
-        g.drawOval (this.canto.getX()-raio1, this.canto.getY()-raio2, 2*raio1, 2*raio2);
         l.setColor (this.corInterior);
-        l.fillOval (this.canto.getX()-raio1, this.canto.getY()-raio2, 2*raio1, 2*raio2);
+        l.fillOval (this.canto.getX(), this.canto.getY(), raio1, raio2);
+        g.setColor (this.corContorno);
+        g.drawOval (this.canto.getX(), this.canto.getY(), raio1, raio2);
+        
 			
     }
 

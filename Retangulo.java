@@ -24,7 +24,6 @@ public class Retangulo extends Figura {
         this.p2 = new Ponto (x2,y2,cor,corI);
         
         
-        
         if((p2.getX() < p1.getX()) && (p2.getY() < p1.getY())) //se p2 está acima e a esquerda -izi
         	this.pbase = this.p2;
         else if((p1.getX() < p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta abixo e a direita - izi

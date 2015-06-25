@@ -43,10 +43,11 @@ public class Janela extends JFrame
 	esperaRetangulo, esperaFimRetangulo,esperaInicioTriangulo, esperaTriangulo, esperaFimTriangulo, 
 	Salvar, Abrir, AbrirCorContorno, AbrirCorInterior, esperaEscreve, Sair, Exportar;
 	private Color corContorno = Color.black;
-	private Color corInterior = new Color(0,0,0,0);
+	private Color corInterior = new Color(238,238,238);
 	private Ponto p1,p2,p3,p4;
 	private Font FonteEscolhida = new Font("Serif", Font.ITALIC, 20);
 	private Vector<Figura> figuras = new Vector<Figura>();
+	private Figura provisoria;
 	public Janela ()
 	{
 		super("Editor Grafico ");
@@ -217,14 +218,15 @@ public class Janela extends JFrame
 				pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
 			}
 		});
+		
 		Timer temporizador = new Timer();
         temporizador.scheduleAtFixedRate(new TimerTask() {
           @Override
           public void run() {
         	  pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+        	  
           }
         },0,100);
-		
 		JPanel     pnlBotoes = new JPanel();
 		JMenuBar    barMenus = new JMenuBar();
 		FlowLayout flwBotoes = new FlowLayout(); 
@@ -260,8 +262,8 @@ public class Janela extends JFrame
 		pnlStatus.add(statusBar2);
 		Container cntForm = this.getContentPane();
 		cntForm.setLayout (new BorderLayout());
-		cntForm.add (pnlBotoes,  BorderLayout.NORTH);
 		cntForm.add (pnlDesenho, BorderLayout.CENTER);
+		cntForm.add (pnlBotoes,  BorderLayout.NORTH);
 		cntForm.add (pnlStatus,  BorderLayout.SOUTH);
 		this.addWindowListener (new FechamentoDeJanela());
 		this.setSize (1200,800);
@@ -283,6 +285,7 @@ public class Janela extends JFrame
 		}
 		public void paint (Graphics g, Graphics l)
 		{
+			
 			for (int i=0 ; i<figuras.size(); i++)
 				figuras.get(i).torneSeVisivel(g,l);
 		}
@@ -298,7 +301,6 @@ public class Janela extends JFrame
             {
                 figuras.add (new Ponto (e.getX(), e.getY(), corContorno, corInterior));
                 pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                
             }
             else if (esperaInicioReta)
             {
@@ -307,9 +309,7 @@ public class Janela extends JFrame
                 esperaFimReta = true;
                 statusBar1.setText("Mensagem: Clique e arraste para desenhar uma reta");
 
-             }
-             
-
+            }
             else if (esperaInicioCirculo)
             {
         		p2 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
@@ -321,39 +321,13 @@ public class Janela extends JFrame
             {
         		
         		p3 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
-        		
         		esperaInicioElipse = false;
         		esperaElipse = true;
         		esperaFimElipse = true;
                 statusBar1.setText("Mensagem: clique o ponto final da Elipse");
             }
-        	else if (esperaElipse)
-            {
-        		
-        		p4 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
-        		
-            	esperaInicioElipse = false;
-            	esperaElipse = false;
-        		esperaFimElipse = true;
-        		
-                statusBar1.setText("Mensagem:clique o pronto da Elipse");
-            }
-        	else if (esperaFimElipse)
-            {
-        		
-        		double r1 = Math.sqrt( Math.pow( (p3.getX() - e.getX()),2 ) +
-                                       Math.pow( (p3.getY() - e.getY()),2 ) );
+        	
 
-            	double r2 = Math.sqrt( Math.pow( (p4.getX() - e.getX()),2 ) +
-                                       Math.pow( (p4.getY() - e.getY()),2 ) );
-        		
-            	esperaInicioElipse = false;
-        		esperaFimElipse = false;
-        		
-                figuras.add (new Elipse (p3.getX(), p3.getY(), (int)r1, (int)r2, corContorno,corInterior));
-                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                statusBar1.setText("Mensagem:");
-            }
             else if (esperaQuadrado)
             {
                 p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
@@ -361,14 +335,7 @@ public class Janela extends JFrame
                 esperaFimQuadrado = true;
                 statusBar1.setText("Mensagem: clique o ponto final do Quadrado");    
              }
-             else if (esperaFimQuadrado)
-            {
-                esperaQuadrado = false;
-                esperaFimQuadrado = false;
-                figuras.add (new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
-                figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                statusBar1.setText("Mensagem:");    
-            }
+             
              else if (esperaRetangulo)
              {
                  p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
@@ -376,14 +343,6 @@ public class Janela extends JFrame
                  esperaFimRetangulo = true;
                  statusBar1.setText("Mensagem: clique o ponto final do Retangulo");    
               }
-              else if (esperaFimRetangulo)
-             {
-                 esperaRetangulo = false;
-                 esperaFimRetangulo = false;
-                 figuras.add (new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
-                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                 statusBar1.setText("Mensagem:");    
-             }
               else if (esperaEscreve)
               {
                   p1 = new Ponto (e.getX(), e.getY(), corContorno, corInterior);
@@ -412,16 +371,7 @@ public class Janela extends JFrame
                  esperaFimTriangulo = true;
                  statusBar1.setText("Mensagem: clique o ponto final do Triangulo");    
               }
-              else if (esperaFimTriangulo)
-             {
-            	 esperaInicioTriangulo = false;
-                 esperaTriangulo = false;
-                 esperaFimTriangulo = false;
-                 figuras.add (new Triangulo(e.getX(), e.getY(), p2.getX(), p2.getY(),
-                		 					p1.getX(), p1.getY(),corContorno,corInterior));
-                 figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                 statusBar1.setText("Mensagem:");    
-             }
+              
         	else if (Salvar)
 	        {
 	    		Salvar = false;
@@ -443,18 +393,72 @@ public class Janela extends JFrame
                 esperaFimReta = false;
                 figuras.add (new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
                 pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                    
+                statusBar1.setText("Mensagem:");
+
             }
             else if (esperaFimCirculo)
             {
-        		
-        		double r = Math.sqrt( Math.pow( (p2.getX() - e.getX()),2 ) +
-                                      Math.pow( (p2.getY() - e.getY()),2 ) );
-        		
-        		esperaInicioCirculo = false;
-        		esperaFimCirculo = false;
-                figuras.add (new Circulo (p2.getX(), p2.getY(), (int)r, corContorno, corInterior));
+
+            	double r = Math.abs(p2.getX() - e.getX());
+        		if(r < Math.abs(p2.getY() - e.getY()))
+        			r = Math.abs(p2.getY() - e.getY());
+               	
+            	esperaInicioCirculo = false;
+            	esperaFimCirculo = false;
+            	figuras.add (new Circulo (p2.getX(), p2.getY(), (int)r, corContorno, corInterior));
                 pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem:");
+            }
+            else if (esperaFimElipse)
+        	{
+        		
+        		
+            	if((e.getX() < p3.getX()) && (e.getY() < p3.getY())) //se e está acima e a esquerda -izi
+            	p4 = new Ponto (e.getX(),e.getY());
+		        else if((p3.getX() < e.getX()) && (p3.getY() < e.getY())) //se e esta abixo e a direita - izi
+		        p4 = p3;
+		        else if((p3.getX() < e.getX()) && (p3.getY() > e.getY())) //se e esta acima e a direita - hardcore
+		        p4 = new Ponto (p3.getX(),e.getY());
+		        else if((p3.getX() > e.getX()) && (p3.getY() < e.getY())) //se e esta acima e a direita - hardcore
+		        p4 = new Ponto (e.getX(),p3.getY());
+
+		        int w = p3.getX() - e.getX();
+		        if(w < 0) w = -w;
+		        int h = p3.getY() - e.getY();
+		        if(h < 0) h = -h;
+		        
+            	esperaInicioElipse = false;
+        		esperaFimElipse = false;
+        		
+                figuras.add (new Elipse (p4.getX(), p4.getY(), w, h, corContorno,corInterior));
+                pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem:");
+            }
+            else if (esperaFimQuadrado)
+            {
+            	esperaQuadrado = false;
+            	esperaFimQuadrado = false;
+            	figuras.add (new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
+            	pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+            	statusBar1.setText("Mensagem:");    
+            }
+            else if (esperaFimRetangulo)
+            {
+            	esperaRetangulo = false;
+            	esperaFimRetangulo = false;
+            	figuras.add (new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
+            	pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+            	statusBar1.setText("Mensagem:");    
+            }
+            else if (esperaFimTriangulo)
+            {
+            	esperaInicioTriangulo = false;
+            	esperaTriangulo = false;
+            	esperaFimTriangulo = false;
+            	figuras.add (new Triangulo(e.getX(), e.getY(), p2.getX(), p2.getY(),
+            		p1.getX(), p1.getY(),corContorno,corInterior));
+            	pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+            	statusBar1.setText("Mensagem:");    
             }
 
 			
@@ -471,19 +475,64 @@ public class Janela extends JFrame
 			if (esperaFimReta)
             {
                 pnlDesenho.limpa(pnlDesenho.getGraphics());
-                figuras.add (new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior));
-                pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                figuras.removeElementAt(figuras.size() - 1);
+                provisoria = new Linha(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior);
+                provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem: Desenhando Reta");
                     
             }
             else if (esperaFimCirculo)
             {
         		pnlDesenho.limpa(pnlDesenho.getGraphics());
-        		double r = Math.sqrt( Math.pow( (p2.getX() - e.getX()),2 ) +
-                                      Math.pow( (p2.getY() - e.getY()),2 ) );
-                figuras.add (new Circulo (p2.getX(), p2.getY(), (int)r, corContorno, corInterior));
-                pnlDesenho.paint(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-                figuras.removeElementAt(figuras.size() - 1);
+        		double r = Math.abs(p2.getX() - e.getX());
+        		if(r < Math.abs(p2.getY() - e.getY()))
+        			r = Math.abs(p2.getY() - e.getY());
+        		provisoria = new Circulo (p2.getX(), p2.getY(), (int)r, corContorno, corInterior);
+                provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+                statusBar1.setText("Mensagem: Desenhado Circulo");
+            }
+            else if (esperaFimElipse)
+        	{
+        		
+        		pnlDesenho.limpa(pnlDesenho.getGraphics());
+            	if((e.getX() < p3.getX()) && (e.getY() < p3.getY())) //se e está acima e a esquerda -izi
+            	p4 = new Ponto (e.getX(),e.getY());
+		        else if((p3.getX() < e.getX()) && (p3.getY() < e.getY())) //se e esta abixo e a direita - izi
+		        p4 = p3;
+		        else if((p3.getX() < e.getX()) && (p3.getY() > e.getY())) //se e esta acima e a direita - hardcore
+		        p4 = new Ponto (p3.getX(),e.getY());
+		        else if((p3.getX() > e.getX()) && (p3.getY() < e.getY())) //se e esta acima e a direita - hardcore
+		        p4 = new Ponto (e.getX(),p3.getY());
+
+		        int w = p3.getX() - e.getX();
+		        if(w < 0) w = -w;
+		        int h = p3.getY() - e.getY();
+		        if(h < 0) h = -h;
+		        
+
+		        provisoria = new Elipse (p4.getX(), p4.getY(), w, h, corContorno,corInterior);
+		        provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+		        statusBar1.setText("Mensagem: Desenhando Elipse");
+		    }
+		    else if (esperaFimQuadrado)
+		    {
+		    	pnlDesenho.limpa(pnlDesenho.getGraphics());
+		    	provisoria = new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior);
+		    	provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+		    	statusBar1.setText("Mensagem: Desenhando Quadrado");   
+		    }
+		    else if (esperaFimRetangulo)
+		    {
+		    	pnlDesenho.limpa(pnlDesenho.getGraphics());
+		    	provisoria = new Retangulo(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior);
+		    	provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+		    	statusBar1.setText("Mensagem: Desenhando Retangulo");    
+		    }
+		    else if (esperaFimTriangulo)
+            {
+            	pnlDesenho.limpa(pnlDesenho.getGraphics());
+            	provisoria = new Triangulo(e.getX(), e.getY(), p2.getX(), p2.getY(), p1.getX(), p1.getY(),corContorno,corInterior);
+            	provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
+            	statusBar1.setText("Mensagem: Desenhando Triangulo");    
             }
 		}
 		public void mouseMoved(MouseEvent e)
