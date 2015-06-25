@@ -1,37 +1,65 @@
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.StringTokenizer;
 
-public class Circulo extends Figura
-{
-    protected Ponto centro;
-    protected int   raio;
+
+public class Quadrado extends Figura {
     
-    public Circulo (int x, int y, int r)
+    protected Ponto p1, p2, pbase;
+    protected int w, h , lado;
+    
+    public Quadrado (int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
     {
-        super ();
+        super();
 
-        this.centro = new Ponto (x,y);
-        this.raio   = r;
+        this.p1 = new Ponto (x1,y1);
+        this.p2 = new Ponto (x2,y2);
     }
     
-    public Circulo (int x, int y, int r, Color cor, Color corI)
+    public Quadrado (int x1, int y1, int x2, int y2, Color cor, Color corI)
     {
-        super (cor, corI);
+        super(cor,corI);
 
-        this.centro = new Ponto (x,y);
-        this.raio   = r;
+        this.p1 = new Ponto (x1,y1,cor,corI);
+        this.p2 = new Ponto (x2,y2,cor,corI);
+        
+        
+        
+        if((p2.getX() < p1.getX()) && (p2.getY() < p1.getY())) //se p2 est� acima e a esquerda -izi
+            this.pbase = this.p2;
+        else if((p1.getX() < p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta abixo e a direita - izi
+            this.pbase = this.p1;
+        else if((p1.getX() < p2.getX()) && (p1.getY() > p2.getY())) //se p2 esta acima e a direita - hardcore
+            this.pbase = new Ponto (p1.getX(),p2.getY());
+        else if((p1.getX() > p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta acima e a direita - hardcore
+            this.pbase = new Ponto (p2.getX(),p1.getY());
+        
+        this.w = p1.getX() - p2.getX();
+        if(this.w < 0) this.w = -this.w;
+        
+        
+        this.h = p1.getY() - p2.getY();
+        if(this.h < 0) this.h = -this.h;
+        
+        
+        if(this.w > this.h) this.lado = this.w;
+        else this.lado = this.h;
+       
     }
 
-    public Circulo (String s)
+    public Quadrado (String s)
     {
         StringTokenizer quebrador = new StringTokenizer(s,":");
 
         quebrador.nextToken();
 
-        int   x   = Integer.parseInt(quebrador.nextToken());
-        int   y   = Integer.parseInt(quebrador.nextToken());
+        int   x1  = Integer.parseInt(quebrador.nextToken());
+        int   y1  = Integer.parseInt(quebrador.nextToken());
 
-        int   r   = Integer.parseInt(quebrador.nextToken());
+        int   x2  = Integer.parseInt(quebrador.nextToken());
+        int   y2  = Integer.parseInt(quebrador.nextToken());
+        
+
 
         Color cor = new Color (Integer.parseInt(quebrador.nextToken()),  // R
                                Integer.parseInt(quebrador.nextToken()),  // G
@@ -42,49 +70,79 @@ public class Circulo extends Figura
                                 Integer.parseInt(quebrador.nextToken()),  // B
                                 Integer.parseInt(quebrador.nextToken())); // A
 
-        this.centro = new Ponto (x,y,cor,corI);
-        this.raio   = r;
+        this.p1  = new Ponto (x1,y1,cor,corI);
+        this.p2  = new Ponto (x2,y2,cor,corI);
         this.corContorno    = cor;
         this.corInterior    = corI;
+        
+        
+        if((p2.getX() < p1.getX()) && (p2.getY() < p1.getY())) //se p2 est� acima e a esquerda -izi
+            this.pbase = this.p2;
+        else if((p1.getX() < p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta abixo e a direita - izi
+            this.pbase = this.p1;
+        else if((p1.getX() < p2.getX()) && (p1.getY() > p2.getY())) //se p2 esta acima e a direita - hardcore
+            this.pbase = new Ponto (p1.getX(),p2.getY());
+        else if((p1.getX() > p2.getX()) && (p1.getY() < p2.getY())) //se p2 esta acima e a direita - hardcore
+            this.pbase = new Ponto (p2.getX(),p1.getY());
+        this.w = p1.getX() - p2.getX();
+        if(this.w < 0) this.w = -this.w;
+        this.h = p1.getY() - p2.getY();
+        if(this.h < 0) this.h = -this.h;
+        if(this.w > this.h) this.lado = this.w;
+        else this.lado = this.h;
+        
+        
+        
     }
 
-    public void setCentro (int x, int y)
+    public void setP1 (int x, int y)
     {
-        this.centro = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
+        this.p1 = new Ponto (x,y,this.getCorContorno(),this.getCorInterior());
     }
 
-    public void setRaio (int r)
+    public void setP2 (int x, int y)
     {
-        this.raio = r;
+        this.w = x;
+    }
+    public void setP3 (int x, int y)
+    {
+        this.h = x;
     }
 
-    public Ponto getCentro ()
+
+    public Ponto getP1 ()
     {
-        return this.centro;
+        return this.p1;
     }
 
-    public int getRaio ()
+    public int getw()
     {
-        return this.raio;
+        return this.w;
     }
+    public int geth()
+    {
+        return this.h;
+    }
+
 
     public void torneSeVisivel (Graphics g, Graphics l)
     {
-        l.setColor (this.corInterior);
-        g.setColor (this.corContorno);
-        l.fillOval (this.centro.getX()-raio, this.centro.getY()-raio, 2*raio, 2*raio);
-        g.drawOval (this.centro.getX()-raio, this.centro.getY()-raio, 2*raio, 2*raio);
-            
+        g.setColor(this.corContorno);
+        l.setColor(this.corInterior);
+        g.drawRect(pbase.getX(), pbase.getY(), lado, lado);
+        l.fillRect(pbase.getX()+1, pbase.getY()+1, lado-1, lado-1);
     }
 
     public String toString()
     {
-        return "c:" +
-               this.centro.getX() +
+        return "q:" +
+               this.p1.getX() +
                ":" +
-               this.centro.getY() +
+               this.p1.getY() +
                ":" +
-               this.raio +
+               this.p2.getX() +
+               ":" +
+               this.p2.getY() +
                ":" +
                this.getCorContorno().getRed() +
                ":" +
@@ -99,14 +157,16 @@ public class Circulo extends Figura
                this.getCorInterior().getBlue() +
                ":" +
                this.getCorInterior().getAlpha();
+                
     }
     
     public String toSvg()
     {
-        return "<circle " +
-               "cx='" + this.centro.getX() + "' " +
-               "cy='" + this.centro.getY() + "' " +
-               "r='" + raio + "' " +
+        return "<rect " +
+               "x='" + pbase.getX() + "' " +
+               "y='" + pbase.getY() + "' " +
+               "width='" + lado + "' " +
+               "height='" + lado + "' " +
                "style='fill: rgb(" + this.getCorInterior().getRed() +
                "," + this.getCorInterior().getGreen() +
                "," + this.getCorInterior().getBlue() +
@@ -119,96 +179,102 @@ public class Circulo extends Figura
     
     public int hashCode()
     {
-        int resultado =1;
+        int resultado = 1;
         
-        resultado = resultado*7 + this.raio;
-        resultado = resultado*7 + this.centro.getX();
-        resultado = resultado*7 + this.centro.getY();
-        resultado = resultado*7 + this.corContorno.getRed();
-        resultado = resultado*7 + this.corContorno.getGreen();
-        resultado = resultado*7 + this.corContorno.getBlue();
+        resultado = resultado*7+this.p1.getX();
+        resultado = resultado*7+this.p1.getY();
+        resultado = resultado*7+this.p2.getX();
+        resultado = resultado*7+this.p2.getY();
+        resultado = resultado*7+this.getCorContorno().getBlue();
+        resultado = resultado*7+this.getCorContorno().getRed();
+        resultado = resultado*7+this.getCorContorno().getGreen();
         
         return resultado;
     }
     
-    public boolean equals (Object obj)
+    public boolean equals(Object obj)
     {
-        if (this==obj)
+        if(this==obj)
             return true;
-
-        if (obj==null)
+        if(obj==this)
             return false;
-        
-        if (obj instanceof Circulo)
+        if(obj instanceof Linha)
         {
-            Circulo cir = (Circulo)obj;
-
-            if (cir.centro    == this.centro   &&
-                cir.raio == this.raio          &&
-                cir.corContorno == this.corContorno)
-                return true;
+            Linha lin =  (Linha)obj;
+            if(lin.p1  == this.p1                  &&
+               lin.p2  == this.p2                  &&
+               lin.corContorno == this.corContorno &&
+               lin.corInterior == this.corInterior)
+               return true;
         }
         return false;
     }
     
-    public int compareTo (Circulo c)
+    public int compareTo (Linha l)
     {
-        if (this.centro.getX()<c.centro.getX())
-             return -7;
-
-        if (this.centro.getY()<c.centro.getY())
+        if (this.p1.getX()<l.p1.getX())
             return -7;
 
-        if (this.raio<c.raio)
+        if (this.p1.getY()<l.p1.getY())
+            return -7;
+
+        if (this.p2.getX()<l.p2.getX())
             return -7;
         
-        if (this.corContorno.getRed()<c.corContorno.getRed())
+        if (this.p2.getY()<l.p2.getY())
+            return -7;
+        
+        if (this.corContorno.getRed()<l.corContorno.getRed())
             return -7;
        
-       if (this.corContorno.getGreen()<c.corContorno.getGreen())
-           return -7;
+        if (this.corContorno.getGreen()<l.corContorno.getGreen())
+            return -7;
        
-       if (this.corContorno.getBlue()<c.corContorno.getBlue())
-           return -7;
+        if (this.corContorno.getBlue()<l.corContorno.getBlue())
+            return -7;
         
-        if (this.centro.getX()>c.centro.getX())
+        if (this.corInterior.getRed()<l.corInterior.getRed())
+            return -7;
+       
+        if (this.corInterior.getGreen()<l.corInterior.getGreen())
+            return -7;
+       
+        if (this.corInterior.getBlue()<l.corInterior.getBlue())
+            return -7;
+        
+        if (this.p1.getX()>l.p1.getX())
             return 7;
 
-        if (this.centro.getY()>c.centro.getY())
-           return 7;
+        if (this.p1.getY()>l.p1.getY())
+            return 7;
         
-        if (this.raio>c.raio)
+        if (this.p2.getX()>l.p2.getX())
             return 7;
 
-        if (this.corContorno.getRed()>c.corContorno.getRed())
-             return 7;
-        
-        if (this.corContorno.getGreen()>c.corContorno.getGreen())
+        if (this.p2.getY()>l.p2.getY())
+            return 7;
+
+        if (this.corContorno.getRed()>l.corContorno.getRed())
             return 7;
         
-        if (this.corContorno.getBlue()>c.corContorno.getBlue())
+        if (this.corContorno.getGreen()>l.corContorno.getGreen())
+            return 7;
+        
+        if (this.corContorno.getBlue()>l.corContorno.getBlue())
+            return 7;
+        
+        if (this.corInterior.getRed()<l.corInterior.getRed())
+            return 7;
+       
+        if (this.corInterior.getGreen()<l.corInterior.getGreen())
+            return 7;
+       
+        if (this.corInterior.getBlue()<l.corInterior.getBlue())
             return 7;
         
         return 0;
     }
     
-    public Object clone ()
-    {
-        Circulo c = null;
-
-        try
-        {
-            c = new Circulo (this.centro.getX(),this.centro.getY(),this.raio,this.corContorno,this.corInterior);
-        }
-        catch (Exception erro)
-        {}
-
-        return c;
-    }
-    
-    public Circulo (Circulo modelo)
-    {
-        this (modelo.getCentro().getX(), modelo.getCentro().getY(), modelo.raio,modelo.corContorno,modelo.corInterior);
-    }
-    
 }
+    
+ 
