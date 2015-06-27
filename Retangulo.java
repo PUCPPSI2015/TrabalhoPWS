@@ -37,6 +37,8 @@ public class Retangulo extends Figura {
         if(this.w < 0) this.w = -this.w;
         this.h = p1.getY() - p2.getY();
         if(this.h < 0) this.h = -this.h;
+        if(this.w == 0 || this.w == 1) this.w = 2;
+        if(this.h == 0 || this.h == 1) this.h = 2;
 
        
     }
@@ -81,6 +83,8 @@ public class Retangulo extends Figura {
         if(this.w < 0) this.w = -this.w;
         this.h = p1.getY() - p2.getY();
         if(this.h < 0) this.h = -this.h;
+        if(this.w == 0 || this.w == 1) this.w = 2;
+        if(this.h == 0 || this.h == 1) this.h = 2;
         
     }
 

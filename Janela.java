@@ -34,7 +34,7 @@ public class Janela extends JFrame
 	btnExportarAnimado  = new JMenuItem ("Exportar pagina da web animada (css3)"),
 	btnExportarVetor  = new JMenuItem ("Exportar como vetor (Svg)"),
 	btnFonte  = new JMenuItem ("Fontes");
-	private JButton btnApagar  = new JButton ("Apagar");
+	
 	private MeuJPanel pnlDesenho = new MeuJPanel ();
 	private JLabel statusBar1 = new JLabel ("Mensagem:"),
 	statusBar2 = new JLabel ("Coordenada:");
@@ -136,18 +136,7 @@ public class Janela extends JFrame
 				"Arquivo de imagem ausente",
 				JOptionPane.WARNING_MESSAGE);
 		}
-		try
-		{
-			Image btnApagarImg = ImageIO.read(getClass().getResource("resources/apagar.jpg"));
-			btnApagar.setIcon(new ImageIcon(btnApagarImg));
-		}
-		catch (IOException e)
-		{
-			JOptionPane.showMessageDialog (null,
-				"Arquivo apagar.jpg nÔøΩo foi encontrado",
-				"Arquivo de imagem ausente",
-				JOptionPane.WARNING_MESSAGE);
-		}
+		
 		try
 		{
 			Image btnSairImg = ImageIO.read(getClass().getResource("resources/sair.jpg"));
@@ -254,7 +243,6 @@ public class Janela extends JFrame
 		barMenus.add(mnuTexto);
 		mnuTexto.add (btnEscreve);
 		mnuTexto.add (btnFonte);
-		pnlBotoes.add (btnApagar);
 		JPanel     pnlStatus = new JPanel();
 		GridLayout grdStatus = new GridLayout(1,2);
 		pnlStatus.setLayout(grdStatus);
@@ -518,7 +506,8 @@ public class Janela extends JFrame
 		    	pnlDesenho.limpa(pnlDesenho.getGraphics());
 		    	provisoria = new Quadrado(p1.getX(), p1.getY(), e.getX(), e.getY(), corContorno,corInterior);
 		    	provisoria.torneSeVisivel(pnlDesenho.getGraphics(),pnlDesenho.getGraphics());
-		    	statusBar1.setText("Mensagem: Desenhando Quadrado");   
+		    	statusBar1.setText("Mensagem: Desenhando Quadrado");
+		    	   
 		    }
 		    else if (esperaFimRetangulo)
 		    {
@@ -627,7 +616,10 @@ public class Janela extends JFrame
 							file = new File(caminho+".pws");
 						}
 						else{
-							JOptionPane.showMessageDialog(null,"O arquivo jÔøΩ ecziste! Deseja substituÔøΩ-lo??? (te amo :3)");
+							int resposta = JOptionPane.showConfirmDialog(null,"O arquivo ja existe! Deseja substituÔøΩ-lo???");
+							if(resposta != JOptionPane.YES_OPTION)
+								return;
+
 						}
 						String[] stringDividida = figuras.toString().split(",");
 						try{
